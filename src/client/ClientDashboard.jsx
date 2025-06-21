@@ -1,39 +1,80 @@
-
-
 import React from "react";
 import { useNavigate } from "react-router";
-import ProgressControl from '@/components/Client/ProgressControl.tsx'
+import ProgressControl from "@/components/Client/ProgressControl.tsx";
 import { Button } from "../components/ui/button";
 import BusinessPlanProgress from "@/components/Client/BusinessPlanProgress.tsx";
+import {fetchProjectData} from '@/lib/api/project-management.ts';
 
-const progressItems = [
-  { title: "Executive Summary", status: "Completed", percent: 100, color: "bg-green-500" },
-  { title: "Market Analysis", status: "Completed", percent: 100, color: "bg-green-500" },
-  { title: "Competitive Analysis", status: "In Progress", percent: 80, color: "bg-blue-500" },
-  { title: "Marketing Strategy", status: "In Progress", percent: 50, color: "bg-blue-500" },
-  { title: "Financial Projections", status: "Not Started", percent: 0, color: "bg-gray-300" },
-  { title: "Implementation Timeline", status: "Not Started", percent: 0, color: "bg-gray-300" },
-];
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const mapStatusToPercent = (status) => {
+  switch (status) {
+    case "Completed":
+      return 100;
+    case "In Progress":
+      return 50;
+    case "Not Started":
+      return 0;
+    default:
+      return 0;
+  }
+};
+
+const mapStatusToColor = (status) => {
+  switch (status) {
+    case "Completed":
+      return "bg-green-500";
+    case "In Progress":
+      return "bg-blue-500";
+    case "Not Started":
+      return "bg-gray-300";
+    default:
+      return "bg-gray-300";
+  }
+};
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
+  const { user, isLoaded } = useUser();
 
-   const handleNavigate = () => {
+  const clerkId = user?.id;
+
+  const fetchProjectDataDetails = async () => {
+    const { data } = await axios.get(`${fetchProjectData}/${clerkId}`);
+    return data?.data;
+  };
+
+  const { data: projectData, isLoading, isError } = useQuery({
+    queryKey: ["fetchProjectDataDetails", clerkId],
+    queryFn: fetchProjectDataDetails,
+    enabled: isLoaded && !!clerkId,
+  });
+
+  const handleNavigate = () => {
     navigate("/client/chat");
   };
+
+  if (!isLoaded || isLoading) {
+    return <div className="p-6">Loading...</div>;
+  }
+
+  if (isError) {
+    return <div className="p-6 text-red-600">Failed to load project data.</div>;
+  }
+
+ 
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left: Business Plan Progress */}
-        <BusinessPlanProgress 
-        progressItems={progressItems} />
+        <BusinessPlanProgress projectData={projectData} />
 
-        {/* Right: AI Assistant */}
         <div className="bg-white p-6 rounded-xl shadow-md">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-lg font-semibold">AI Assistant</h2>
-            <span className="text-sm px-2 py-1 rounded-full bg-green-100 text-green-600 ">
+            <span className="text-sm px-2 py-1 rounded-full bg-green-100 text-green-600">
               Online
             </span>
           </div>
@@ -65,7 +106,4 @@ const ClientDashboard = () => {
   );
 };
 
-
-
-export default ClientDashboard
-
+export default ClientDashboard;
