@@ -14,40 +14,13 @@ import { verifyUser } from '../lib/services/verifyUser';
 
 
 
+
 const MainRoutes = () => {
   const { isSignedIn, userId } = useAuth();
   const location = useLocation();
   const [result, setResult] = useState({ allowed: null, redirectTo: '/' });
 
-  useEffect(() => {
-    const runCheck = async () => {
-      // Short-circuit if unauthenticated and on public route
-      const publicPaths = ['/', '/onboard', '/coach-signup', '/coach-onboarding'];
-      const isPublic = publicPaths.some(path => location.pathname.startsWith(path));
-
-      if (!isSignedIn && isPublic) {
-        setResult({ allowed: true });
-        return;
-      }
-
-      const res = await verifyUser(isSignedIn, userId, location.pathname);
-      setResult(res);
-    };
-
-    runCheck();
-  }, [isSignedIn, userId, location.pathname]);
-
-  if (result.allowed === null) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <span>Loading...</span>
-      </div>
-    );
-  }
-
-  if (!result.allowed && result.redirectTo) {
-    return <Navigate to={result.redirectTo} replace />;
-  }
+  
 
   return (
     <Routes>
@@ -55,7 +28,11 @@ const MainRoutes = () => {
       <Route path="/onboard" element={<Onboard />} />
       <Route path="/coach-signup" element={<CoachSignup />} />
       <Route path="/coach-onboarding" element={<CoachOnboarding />} />
-      <Route path="/client" element={<ClientLayout />}>
+      <Route path="/client" element={
+       
+    <ClientLayout />
+  
+      }>
         <Route path="dashboard" element={<ClientDashboard />} />
         <Route path="chat" element={<AiChat />} />
       </Route>
