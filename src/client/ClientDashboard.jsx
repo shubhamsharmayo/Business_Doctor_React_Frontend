@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import ProgressControl from "@/components/Client/ProgressControl.tsx";
 import { Button } from "../components/ui/button";
 import BusinessPlanProgress from "@/components/Client/BusinessPlanProgress.tsx";
-
+import db from "@/db/dexieDB.js";
 
 import SelectProject from '@/components/Client/Project Management/SelectProject.tsx';
 import { useAuth, useUser } from "@clerk/clerk-react";
@@ -42,27 +42,24 @@ const ClientDashboard = () => {
   const { user, isLoaded } = useUser();
 
   const clerkId = user?.id;
+  const [projectData, setProjectData] = useState({});
 
-  
+    // ✅ Fetch selected project from Dexie and log it
+  useEffect(() => {
+    const fetchSelectedProject = async () => {
+      const selectedProject = await db.selected_project.toCollection().first();
+      setProjectData(selectedProject);
+      console.log("Selected project in client dashboard:", selectedProject);
+    };
+    fetchSelectedProject();
+  }, []);
 
-  // const { data: projectData, isLoading, isError } = useQuery({
-  //   queryKey: ["fetchProjectDataDetails", clerkId],
-  //   queryFn: fetchProjectDataDetails,
-  //   enabled: isLoaded && !!clerkId,
-  // });
 
   const handleNavigate = () => {
     navigate("/client/chat");
   };
 
-  // if (!isLoaded || isLoading) {
-  //   return <div className="p-6">Loading...</div>;
-  // }
-
-  // if (isError) {
-  //   return <div className="p-6 text-red-600">Failed to load project data.</div>;
-  // }
-
+  
  
 
   return (
@@ -79,7 +76,7 @@ const ClientDashboard = () => {
 
 
 
-        {/* <BusinessPlanProgress projectData={projectData} /> */}
+        <BusinessPlanProgress projectData={projectData} />
 
         
 

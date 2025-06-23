@@ -5,12 +5,12 @@ import Dexie from "dexie";
 const db = new Dexie("BusinessPlanDB");
 
 // Define your database schema
+
 db.version(1).stores({
-  projects: "_id, project_name, clerk_id, createdAt", // _id is primary key
-  // users: "id, name, email", // optional for later
-  // settings: "key", // optional for app settings
-  // notifications: "++id, read, createdAt" // optional table
+  projects: "_id, project_name, clerk_id, createdAt", // full project list (optional)
+  selected_project: "_id", // stores the full selected project object
 });
+
 
 // You can add hooks or methods if needed
 // db.projects.hook('creating', (primKey, obj) => { console.log("Adding:", obj); });

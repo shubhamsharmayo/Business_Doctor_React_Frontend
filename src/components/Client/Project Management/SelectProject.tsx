@@ -34,29 +34,28 @@ const SelectProject = () => {
     enabled: !!clerkId,
   });
 
-  // Save fetched projects to Dexie
-  useEffect(() => {
-    const saveToDexie = async () => {
-      if (projectData?.length) {
-        try {
-          await db.projects.bulkPut(projectData); // Safe insert/update
-          console.log("Project data saved to Dexie");
-        } catch (error) {
-          console.error("Error saving to Dexie:", error);
-        }
-      }
-    };
-    saveToDexie();
-  }, [projectData]);
+  const handleProjectSelect = async (project) => {
+    try {
+      
+      await db.selected_project.clear(); // optional: if you want to keep only 1
+      await db.selected_project.put(project);
+
+      console.log("Project selected:", project);
+    } catch (error) {
+      console.error("Error selecting project:", error);
+    }
+  };
 
   return (
     <div>
       <DropdownMenu>
         <DropdownMenuTrigger>Select Projects</DropdownMenuTrigger>
         <DropdownMenuContent>
-      
           {projectData?.map((project) => (
-            <DropdownMenuItem key={project._id}>
+            <DropdownMenuItem
+              key={project._id}
+              onClick={() => handleProjectSelect(project)}
+            >
               {project.project_name}
             </DropdownMenuItem>
           ))}

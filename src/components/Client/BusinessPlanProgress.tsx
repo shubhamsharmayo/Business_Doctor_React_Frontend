@@ -1,4 +1,3 @@
-
 import { Button } from '../ui/button';
 import ProgressControl from './ProgressControl';
 import { useNavigate } from 'react-router';
@@ -12,9 +11,9 @@ interface Progress {
   competitive_analysis: ProgressStatus;
   marketing_strategy: ProgressStatus;
   financial_projection: ProgressStatus;
-  implementation_timeline: ProgressStatus;
+  implementation_timeline?: ProgressStatus; // optional in case it's missing
   business_plan_generation: ProgressStatus;
-  executive_summary: ProgressStatus;
+  executive_summary?: ProgressStatus;
 }
 
 // Define the main project data type
@@ -31,7 +30,7 @@ interface ProjectData {
 
 // Define props for your BusinessPlanProgress component
 interface BusinessPlanProgressProps {
-  projectData: ProjectData[];
+  projectData: ProjectData;
 }
 
 // Define the type for progress items in your component
@@ -42,7 +41,7 @@ interface ProgressItem {
   color: string;
 }
 
-const mapStatusToPercent = (status:ProgressStatus) => {
+const mapStatusToPercent = (status: ProgressStatus) => {
   switch (status) {
     case "Completed": return 100;
     case "In Progress": return 50;
@@ -51,7 +50,7 @@ const mapStatusToPercent = (status:ProgressStatus) => {
   }
 };
 
-const mapStatusToColor = (status:ProgressStatus) => {
+const mapStatusToColor = (status: ProgressStatus) => {
   switch (status) {
     case "Completed": return "bg-green-500";
     case "In Progress": return "bg-blue-500";
@@ -60,20 +59,19 @@ const mapStatusToColor = (status:ProgressStatus) => {
   }
 };
 
-const BusinessPlanProgress : React.FC<BusinessPlanProgressProps> = ({ projectData }) => {
+const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({ projectData }) => {
   const navigate = useNavigate();
   const handleNavigate = () => navigate("/client/chat");
-  console.log("projectData", projectData);
 
-  if (!projectData || projectData.length === 0) return null;
+  if (!projectData || !projectData.progress) return null;
 
-  const progress = projectData[0].progress;
+  const progress = projectData.progress;
 
-  const progressItems: ProgressItem[] = Object.keys(progress).map((key) => ({
+  const progressItems: ProgressItem[] = Object.entries(progress).map(([key, value]) => ({
     title: key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
-    status: progress[key],
-    percent: mapStatusToPercent(progress[key]),
-    color: mapStatusToColor(progress[key]),
+    status: value,
+    percent: mapStatusToPercent(value),
+    color: mapStatusToColor(value),
   }));
 
   return (
@@ -86,7 +84,11 @@ const BusinessPlanProgress : React.FC<BusinessPlanProgressProps> = ({ projectDat
         <div key={i} className="mb-4">
           <div className="flex justify-between text-sm mb-1">
             <span>{item.title}</span>
-            <span className={`${item.status === "Completed" ? "text-green-600" : item.status === "In Progress" ? "text-blue-500" : "text-gray-500"}`}>
+            <span className={
+              item.status === "Completed" ? "text-green-600" :
+              item.status === "In Progress" ? "text-blue-500" :
+              "text-gray-500"
+            }>
               {item.status}
             </span>
           </div>
@@ -103,7 +105,6 @@ const BusinessPlanProgress : React.FC<BusinessPlanProgressProps> = ({ projectDat
       ))}
 
       <div className="flex justify-between mt-6">
-        
         <button
           className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700"
           onClick={handleNavigate}
