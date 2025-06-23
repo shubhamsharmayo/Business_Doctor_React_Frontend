@@ -3,8 +3,9 @@ import { useNavigate } from "react-router";
 import ProgressControl from "@/components/Client/ProgressControl.tsx";
 import { Button } from "../components/ui/button";
 import BusinessPlanProgress from "@/components/Client/BusinessPlanProgress.tsx";
-import {fetchProjectData} from '@/lib/api/project-management.ts';
 
+
+import SelectProject from '@/components/Client/Project Management/SelectProject.tsx';
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -42,28 +43,25 @@ const ClientDashboard = () => {
 
   const clerkId = user?.id;
 
-  const fetchProjectDataDetails = async () => {
-    const { data } = await axios.get(`${fetchProjectData}/${clerkId}`);
-    return data?.data;
-  };
+  
 
-  const { data: projectData, isLoading, isError } = useQuery({
-    queryKey: ["fetchProjectDataDetails", clerkId],
-    queryFn: fetchProjectDataDetails,
-    enabled: isLoaded && !!clerkId,
-  });
+  // const { data: projectData, isLoading, isError } = useQuery({
+  //   queryKey: ["fetchProjectDataDetails", clerkId],
+  //   queryFn: fetchProjectDataDetails,
+  //   enabled: isLoaded && !!clerkId,
+  // });
 
   const handleNavigate = () => {
     navigate("/client/chat");
   };
 
-  if (!isLoaded || isLoading) {
-    return <div className="p-6">Loading...</div>;
-  }
+  // if (!isLoaded || isLoading) {
+  //   return <div className="p-6">Loading...</div>;
+  // }
 
-  if (isError) {
-    return <div className="p-6 text-red-600">Failed to load project data.</div>;
-  }
+  // if (isError) {
+  //   return <div className="p-6 text-red-600">Failed to load project data.</div>;
+  // }
 
  
 
@@ -71,7 +69,9 @@ const ClientDashboard = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        <Button variant="outline" >Select Project</Button>
+        <Button variant="outline" >
+          <SelectProject />
+        </Button>
 
         <Button>
           <CreateProject />
@@ -79,7 +79,7 @@ const ClientDashboard = () => {
 
 
 
-        <BusinessPlanProgress projectData={projectData} />
+        {/* <BusinessPlanProgress projectData={projectData} /> */}
 
         
 
