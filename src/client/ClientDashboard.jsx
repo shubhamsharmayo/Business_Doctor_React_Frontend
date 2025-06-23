@@ -8,6 +8,7 @@ import {fetchProjectData} from '@/lib/api/project-management.ts';
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import {CreateProject} from '@/components/Client/Project Management/CreateProject.tsx';
 
 const mapStatusToPercent = (status) => {
   switch (status) {
@@ -69,7 +70,18 @@ const ClientDashboard = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <Button variant="outline" >Select Project</Button>
+
+        <Button>
+          <CreateProject />
+        </Button>
+
+
+
         <BusinessPlanProgress projectData={projectData} />
+
+        
 
         <div className="bg-white p-6 rounded-xl shadow-md">
           <div className="flex items-center justify-between mb-2">

@@ -1,9 +1,48 @@
-import React from 'react';
+
 import { Button } from '../ui/button';
 import ProgressControl from './ProgressControl';
 import { useNavigate } from 'react-router';
 
-const mapStatusToPercent = (status) => {
+// Define the progress status type
+type ProgressStatus = "Not Started" | "In Progress" | "Completed";
+
+// Define the progress object type
+interface Progress {
+  market_analysis: ProgressStatus;
+  competitive_analysis: ProgressStatus;
+  marketing_strategy: ProgressStatus;
+  financial_projection: ProgressStatus;
+  implementation_timeline: ProgressStatus;
+  business_plan_generation: ProgressStatus;
+  executive_summary: ProgressStatus;
+}
+
+// Define the main project data type
+interface ProjectData {
+  progress: Progress;
+  _id: string;
+  project_name: string;
+  clerk_id: string;
+  business_plan_generated: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+// Define props for your BusinessPlanProgress component
+interface BusinessPlanProgressProps {
+  projectData: ProjectData[];
+}
+
+// Define the type for progress items in your component
+interface ProgressItem {
+  title: string;
+  status: ProgressStatus;
+  percent: number;
+  color: string;
+}
+
+const mapStatusToPercent = (status:ProgressStatus) => {
   switch (status) {
     case "Completed": return 100;
     case "In Progress": return 50;
@@ -12,7 +51,7 @@ const mapStatusToPercent = (status) => {
   }
 };
 
-const mapStatusToColor = (status) => {
+const mapStatusToColor = (status:ProgressStatus) => {
   switch (status) {
     case "Completed": return "bg-green-500";
     case "In Progress": return "bg-blue-500";
@@ -21,15 +60,16 @@ const mapStatusToColor = (status) => {
   }
 };
 
-const BusinessPlanProgress = ({ projectData }) => {
+const BusinessPlanProgress : React.FC<BusinessPlanProgressProps> = ({ projectData }) => {
   const navigate = useNavigate();
   const handleNavigate = () => navigate("/client/chat");
+  console.log("projectData", projectData);
 
   if (!projectData || projectData.length === 0) return null;
 
   const progress = projectData[0].progress;
 
-  const progressItems = Object.keys(progress).map((key) => ({
+  const progressItems: ProgressItem[] = Object.keys(progress).map((key) => ({
     title: key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
     status: progress[key],
     percent: mapStatusToPercent(progress[key]),

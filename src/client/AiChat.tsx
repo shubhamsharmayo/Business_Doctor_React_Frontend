@@ -23,8 +23,9 @@ const AiChat = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [checkpointId, setCheckpointId] = useState<string | null>(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("messages", messages);
     const messageText = currentMessage.trim();
     if (!messageText) return;
 
@@ -65,7 +66,7 @@ const AiChat = () => {
             eventSource.close();
           }
         } catch (error) {
-          console.error("Invalid SSE content:", event.data);
+          console.error("Invalid SSE content:", event.data,error);
         }
       };
 

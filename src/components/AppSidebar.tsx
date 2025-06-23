@@ -1,5 +1,5 @@
 // src/components/Sidebar.tsx
-import { Home, Settings, MessageCircle, Menu } from "lucide-react";
+import { Home, MessageCircle, Menu } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
