@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import ProgressControl from "@/components/Client/ProgressControl.tsx";
 import { Button } from "../components/ui/button";
 import BusinessPlanProgress from "@/components/Client/BusinessPlanProgress.tsx";
-import db from "@/db/dexieDB.js";
+
 
 import SelectProject from '@/components/Client/Project Management/SelectProject.tsx';
 import { useUser } from "@clerk/clerk-react";
