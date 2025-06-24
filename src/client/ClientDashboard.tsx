@@ -6,68 +6,81 @@ import BusinessPlanProgress from "@/components/Client/BusinessPlanProgress.tsx";
 import db from "@/db/dexieDB.js";
 
 import SelectProject from '@/components/Client/Project Management/SelectProject.tsx';
-import { useAuth, useUser } from "@clerk/clerk-react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useUser } from "@clerk/clerk-react";
+
 import {CreateProject} from '@/components/Client/Project Management/CreateProject.tsx';
 
-const mapStatusToPercent = (status) => {
-  switch (status) {
-    case "Completed":
-      return 100;
-    case "In Progress":
-      return 50;
-    case "Not Started":
-      return 0;
-    default:
-      return 0;
-  }
-};
-
-const mapStatusToColor = (status) => {
-  switch (status) {
-    case "Completed":
-      return "bg-green-500";
-    case "In Progress":
-      return "bg-blue-500";
-    case "Not Started":
-      return "bg-gray-300";
-    default:
-      return "bg-gray-300";
-  }
-};
+import { useProjectStore } from "@/store/projectStore";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUserAllProjects } from "@/lib/api/project-management";
+import axios from "axios";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
-  const { user, isLoaded } = useUser();
 
+const { user } = useUser();
   const clerkId = user?.id;
-  const [projectData, setProjectData] = useState({});
 
-    // ✅ Fetch selected project from Dexie and log it
-  useEffect(() => {
-    const fetchSelectedProject = async () => {
-      const selectedProject = await db.selected_project.toCollection().first();
-      setProjectData(selectedProject);
-      console.log("Selected project in client dashboard:", selectedProject);
-    };
-    fetchSelectedProject();
-  }, []);
+  const selectedProject = useProjectStore((state) => state.selectedProject);
+
+  const setProjects = useProjectStore(
+    (state) => state.setProjects
+  );
+  
+
+  const UserAllProjects = async (clerkId:string): Promise<ProjectData[]> => {
+    const { data } = await axios.get(`${fetchUserAllProjects}/${clerkId}`);
+    return data?.data;
+  };
+
+  const {
+  data: projectData,
+  isLoading,
+  isError,
+} = useQuery<ProjectData[], Error>({
+  queryKey: ["fetchProjectDataDetails", clerkId], // Include clerkId in queryKey for better caching
+  queryFn: () => UserAllProjects(clerkId!),
+  enabled: !!clerkId,
+});
+
+
+useEffect(() => {
+  if (!projectData) return;
+  setProjects(projectData);
+
+  // Sync the selected project with updated data
+  const existingSelected = useProjectStore.getState().selectedProject;
+  if (existingSelected) {
+    const updated = projectData.find((p) => p._id === existingSelected._id);
+    if (updated) {
+      useProjectStore.getState().setSelectedProject(updated);
+    }
+  }
+}, [projectData]);
+
+
 
 
   const handleNavigate = () => {
     navigate("/client/chat");
   };
 
-  
- 
+  {
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+    if (isError) {
+      return <div>Error: Error occured</div>;
+    }
+  }
+
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         <Button variant="outline" >
-          <SelectProject />
+          <SelectProject projectData={projectData} />
         </Button>
 
         <Button>
@@ -76,7 +89,7 @@ const ClientDashboard = () => {
 
 
 
-        <BusinessPlanProgress projectData={projectData} />
+       <BusinessPlanProgress projectData={selectedProject} />
 
         
 

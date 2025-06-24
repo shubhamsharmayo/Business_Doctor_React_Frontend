@@ -11,7 +11,7 @@ interface Progress {
   competitive_analysis: ProgressStatus;
   marketing_strategy: ProgressStatus;
   financial_projection: ProgressStatus;
-  implementation_timeline?: ProgressStatus; // optional in case it's missing
+  implementation_timeline?: ProgressStatus;
   business_plan_generation: ProgressStatus;
   executive_summary?: ProgressStatus;
 }
@@ -28,13 +28,14 @@ interface ProjectData {
   __v: number;
 }
 
-// Define props for your BusinessPlanProgress component
+// Props
 interface BusinessPlanProgressProps {
   projectData: ProjectData;
 }
 
-// Define the type for progress items in your component
+// For UI rendering
 interface ProgressItem {
+  key: string; // real progress field key
   title: string;
   status: ProgressStatus;
   percent: number;
@@ -63,21 +64,24 @@ const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({ projectData
   const navigate = useNavigate();
   const handleNavigate = () => navigate("/client/chat");
 
+  console.log("Project data in BusinessPlanProgress:", projectData);
+
   if (!projectData || !projectData.progress) return null;
 
-  const progress = projectData.progress;
-
-  const progressItems: ProgressItem[] = Object.entries(progress).map(([key, value]) => ({
-    title: key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
-    status: value,
-    percent: mapStatusToPercent(value),
-    color: mapStatusToColor(value),
-  }));
+  const progressItems: ProgressItem[] = Object.entries(projectData.progress).map(
+    ([key, status]) => ({
+      key, // actual progress field name like "market_analysis"
+      title: key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+      status,
+      percent: mapStatusToPercent(status),
+      color: mapStatusToColor(status),
+    })
+  );
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-md">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Business Plan Progress</h2>
+        <h2 className="text-lg font-semibold">Business Plan Progress: {projectData.project_name}  </h2>
       </div>
 
       {progressItems.map((item, i) => (
@@ -95,11 +99,20 @@ const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({ projectData
 
           <div className="flex items-center space-x-2">
             <div className="w-full h-2 bg-gray-200 rounded-full">
-              <div className={`h-2 rounded-full ${item.color}`} style={{ width: `${item.percent}%` }}></div>
+              <div
+                className={`h-2 rounded-full ${item.color}`}
+                style={{ width: `${item.percent}%` }}
+              ></div>
             </div>
-            <Button variant="outline">
-              <ProgressControl />
-            </Button>
+
+            
+              {/* ✅ Pass correct data here */}
+              <ProgressControl
+                progressItem={item.key} // pass real progress field name
+                projectId={projectData._id}
+                projectName={projectData.project_name}
+              />
+            
           </div>
         </div>
       ))}
@@ -113,6 +126,7 @@ const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({ projectData
         </button>
       </div>
     </div>
+    
   );
 };
 

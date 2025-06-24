@@ -7,4 +7,4 @@ export const createProjectApiUrl = `${API_BASE_URL}/projects/create`;
 export const fetchUserAllProjects = `${API_BASE_URL}/projects`;
 
 //update progress status api
-export const updateProgressStatus = `${API_BASE_URL}/projects/:projectId/progress`;
+export const updateProgressStatus = `${API_BASE_URL}/projects/:projectId/updateProgress`;
