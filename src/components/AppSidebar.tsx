@@ -6,7 +6,7 @@ import clsx from "clsx";
 
 const navItems = [
   { name: "Dashboard", icon: Home, to: "/client/dashboard" },
-  { name: "Messages", icon: MessageCircle, to: "/client/chat" },
+ // { name: "", icon: MessageCircle, to: "/client/chat" },
   
 ];
 

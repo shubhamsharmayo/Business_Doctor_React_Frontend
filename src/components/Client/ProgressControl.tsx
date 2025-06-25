@@ -61,10 +61,6 @@ const ProgressControl = ({ projectName, progressItem, projectId }) => {
         <Button
           variant="outline"
           size="icon"
-          onClick={() => {
-            console.log("Opening dialog for:", progressItem);
-            console.log("Project ID:", projectId);
-          }}
         >
           <Forward />
         </Button>

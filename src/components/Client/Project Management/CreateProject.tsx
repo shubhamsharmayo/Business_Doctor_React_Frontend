@@ -34,8 +34,6 @@ export const CreateProject = () => {
       });
        showSuccess("Project created successfully!");
 
-      console.log("✅ Project created:", response.data);
-
       // Clear inputs & close dialog
       setProjectName("");
       setOpen(false); // ✅ Close the dialog

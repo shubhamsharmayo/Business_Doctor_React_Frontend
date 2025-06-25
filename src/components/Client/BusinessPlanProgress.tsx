@@ -1,3 +1,4 @@
+import { Eye, MessageCircleCode } from 'lucide-react';
 import { Button } from '../ui/button';
 import ProgressControl from './ProgressControl';
 import { useNavigate } from 'react-router';
@@ -62,9 +63,8 @@ const mapStatusToColor = (status: ProgressStatus) => {
 
 const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({ projectData }) => {
   const navigate = useNavigate();
-  const handleNavigate = () => navigate("/client/chat");
+  const handleNavigate = (title) => navigate(`/client/chat/${title}`);
 
-  console.log("Project data in BusinessPlanProgress:", projectData);
 
   if (!projectData || !projectData.progress) return null;
 
@@ -86,8 +86,8 @@ const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({ projectData
 
       {progressItems.map((item, i) => (
         <div key={i} className="mb-4">
-          <div className="flex justify-between text-sm mb-1">
-            <span>{item.title}</span>
+          <div className="flex  text-sm mb-1">
+            <span>{item.title} {" -"} </span>
             <span className={
               item.status === "Completed" ? "text-green-600" :
               item.status === "In Progress" ? "text-blue-500" :
@@ -112,19 +112,17 @@ const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({ projectData
                 projectId={projectData._id}
                 projectName={projectData.project_name}
               />
+
+              <Button
+              onClick={()=>handleNavigate(item.key)}
+              className='cursor-pointer'
+              > <MessageCircleCode/> </Button>
             
           </div>
         </div>
       ))}
 
-      <div className="flex justify-between mt-6">
-        <button
-          className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700"
-          onClick={handleNavigate}
-        >
-          Continue with AI
-        </button>
-      </div>
+      
     </div>
     
   );

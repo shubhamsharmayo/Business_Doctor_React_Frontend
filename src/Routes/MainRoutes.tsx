@@ -34,11 +34,13 @@ const MainRoutes = () => {
   
       }>
         <Route path="dashboard" element={<ClientDashboard />} />
-        <Route path="chat" element={<AiChat />} />
+        <Route path="chat/:chatType" element={<AiChat />} />
       </Route>
+
       <Route path="/coach" element={<CoachLayout />}>
         <Route path="dashboard" element={<CoachDashboard />} />
       </Route>
+      
     </Routes>
   );
 };

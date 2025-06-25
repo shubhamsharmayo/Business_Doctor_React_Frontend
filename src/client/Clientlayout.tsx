@@ -1,8 +1,64 @@
 import AppSidebar  from "@/components/AppSidebar";
 import TopMenubar from "@/components/TopMenubar";
+import { fetchUserAllProjects } from "@/lib/api/project-management";
+import { useProjectStore } from "@/store/projectStore";
+import { useUser } from "@clerk/clerk-react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useEffect } from "react";
 import { Outlet } from "react-router";
 
 const ClientLayout = () => {
+
+  const { user } = useUser();
+  const clerkId = user?.id;
+
+
+  const setProjects = useProjectStore(
+    (state) => state.setProjects
+  );
+
+ 
+  const UserAllProjects = async (clerkId:string): Promise<ProjectData[]> => {
+      const { data } = await axios.get(`${fetchUserAllProjects}/${clerkId}`);
+      return data?.data;
+    };
+  
+    const {
+    data: projectData,
+    isLoading,
+    isError,
+  } = useQuery<ProjectData[], Error>({
+    queryKey: ["fetchProjectDataDetails", clerkId], // Include clerkId in queryKey for better caching
+    queryFn: () => UserAllProjects(clerkId!),
+    enabled: !!clerkId,
+  });
+  
+  
+  useEffect(() => {
+    if (!projectData) return;
+    setProjects(projectData);
+  
+    // Sync the selected project with updated data
+    const existingSelected = useProjectStore.getState().selectedProject;
+    if (existingSelected) {
+      const updated = projectData.find((p) => p._id === existingSelected._id);
+      if (updated) {
+        useProjectStore.getState().setSelectedProject(updated);
+      }
+    }
+  }, [projectData]);
+
+  {
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+    if (isError) {
+      return <div>Error: Error occured</div>;
+    }
+  }
+
+
   return (
     <div className="flex flex-col h-screen">
       {/* Top bar at the top */}

@@ -46,9 +46,6 @@ const SelectProject = ({projectData}) => {
     
       setSelectedProject(project); 
       // ✅ update zustand selected project
-
-      console.log("Project selected and saved:", project);
-    
   };
 
   
