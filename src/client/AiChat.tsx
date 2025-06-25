@@ -129,7 +129,7 @@ const AiChat = () => {
     try {
       let url = `http://192.168.1.10:8000/chat_stream?message=${encodeURIComponent(
         messageText
-      )}`;
+      )}/clerk_id=${encodeURIComponent(userId)}/project_id=${encodeURIComponent(selectedProject?._id)}/chat_type=${encodeURIComponent(chatType)}`;
       if (checkpointId)
         url += `&checkpoint_id=${encodeURIComponent(checkpointId)}`;
 
