@@ -22,8 +22,14 @@ import { useState } from "react";
 import axios from "axios";
 import { updateProgressStatus } from "@/lib/api/project-management"; // assumes you exported the base URL string
 import { useQueryClient } from "@tanstack/react-query";
+import type { ProgressControlProps } from "@/types/project.types";
 
-const ProgressControl = ({ projectName, progressItem, projectId }) => {
+const ProgressControl = ({ 
+  projectName, 
+  progressItem, 
+  projectId }:ProgressControlProps) => {
+
+   
   const [selectedStatus, setSelectedStatus] = useState("");
    const [open, setOpen] = useState(false);
 
@@ -44,7 +50,8 @@ const ProgressControl = ({ projectName, progressItem, projectId }) => {
 
       const response = await axios.patch(url, payload);
       // ✅ Invalidate the query to refetch updated data
-      queryClient.invalidateQueries(["fetchProjectDataDetails"]);
+      queryClient.invalidateQueries({ queryKey: ["fetchProjectDataDetails"] });
+
 
       console.log("✅ Progress updated:", response.data);
     } catch (error) {

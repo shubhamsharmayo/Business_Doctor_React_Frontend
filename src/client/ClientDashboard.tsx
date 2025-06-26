@@ -1,37 +1,25 @@
 
-import { useNavigate } from "react-router";
 
 import { Button } from "../components/ui/button";
 import BusinessPlanProgress from "@/components/Client/BusinessPlanProgress.tsx";
 
 
 import SelectProject from '@/components/Client/Project Management/SelectProject.tsx';
-import { useUser } from "@clerk/clerk-react";
+
 
 import {CreateProject} from '@/components/Client/Project Management/CreateProject.tsx';
 
 import { useProjectStore } from "@/store/projectStore";
+import type { ProjectData } from "@/types/project.types";
 
 
 const ClientDashboard = () => {
-  const navigate = useNavigate();
-
   
   const selectedProject = useProjectStore((state) => state.selectedProject);
 
-  
 
   const projects = useProjectStore((state) => state.projects);
   
-
-
-  const handleNavigate = () => {
-    navigate("/client/chat");
-  };
-
-  
-
-
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -51,7 +39,7 @@ const ClientDashboard = () => {
           <>
            
 
-       <BusinessPlanProgress projectData={selectedProject} />
+       <BusinessPlanProgress projectData={selectedProject as ProjectData} />
 
         
         <div className="bg-white p-6 rounded-xl shadow-md">

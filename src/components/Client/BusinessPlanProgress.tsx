@@ -1,33 +1,16 @@
-import { Eye, MessageCircleCode } from 'lucide-react';
+import { MessageCircleCode } from 'lucide-react';
 import { Button } from '../ui/button';
 import ProgressControl from './ProgressControl';
 import { useNavigate } from 'react-router';
+import type { ProjectData } from '@/types/project.types';
 
 // Define the progress status type
 type ProgressStatus = "Not Started" | "In Progress" | "Completed";
 
 // Define the progress object type
-interface Progress {
-  market_analysis: ProgressStatus;
-  competitive_analysis: ProgressStatus;
-  marketing_strategy: ProgressStatus;
-  financial_projection: ProgressStatus;
-  implementation_timeline?: ProgressStatus;
-  business_plan_generation: ProgressStatus;
-  executive_summary?: ProgressStatus;
-}
+
 
 // Define the main project data type
-interface ProjectData {
-  progress: Progress;
-  _id: string;
-  project_name: string;
-  clerk_id: string;
-  business_plan_generated: boolean;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
 
 // Props
 interface BusinessPlanProgressProps {
@@ -63,7 +46,7 @@ const mapStatusToColor = (status: ProgressStatus) => {
 
 const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({ projectData }) => {
   const navigate = useNavigate();
-  const handleNavigate = (title) => navigate(`/client/chat/${title}`);
+  const handleNavigate = (title:string) => navigate(`/client/chat/${title}`);
 
 
   if (!projectData || !projectData.progress) return null;

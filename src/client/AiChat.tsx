@@ -7,14 +7,9 @@ import { useProjectStore } from "@/store/projectStore";
 import { useParams } from "react-router";
 import axios from "axios";
 import { API_BASE_URL } from "@/lib/api_base_url";
+import type { Message } from "@/types/chat.types";
 
-interface Message {
-  id: number;
-  content: string;
-  isUser: boolean;
-  type: string;
-  isLoading?: boolean;
-}
+
 
 const AiChat = () => {
   const params = useParams();
@@ -129,9 +124,16 @@ const AiChat = () => {
     setCurrentMessage("");
 
     try {
+
+      // ✅ Guard clause to prevent undefined values
+  if (!userId || !selectedProject?._id || !chatType) {
+    console.error("Missing required parameters for chat submission.");
+    return;
+  }
+  
       let url = `${VITE_AI_BACKEND_URL}/chat_stream?message=${encodeURIComponent(
         messageText
-      )}/clerk_id=${encodeURIComponent(userId)}/project_id=${encodeURIComponent(selectedProject?._id)}/chat_type=${encodeURIComponent(chatType)}`;
+      )}&clerk_id=${encodeURIComponent(userId)}&project_id=${encodeURIComponent(selectedProject?._id)}&chat_type=${encodeURIComponent(chatType)}`;
       if (checkpointId)
         url += `&checkpoint_id=${encodeURIComponent(checkpointId)}`;
 
@@ -195,7 +197,7 @@ const AiChat = () => {
   };
 
   return (
-    <div className="flex justify-center bg-gradient-to-br from-slate-50 to-gray-100 h-[calc(100vh-120px)] py-3 px-4">
+    <div className="flex justify-center bg-gradient-to-br from-slate-50 to-gray-100 h-[calc(100vh-50px)] py-3 px-4">
       <div className="w-full bg-white/80 backdrop-blur-sm flex flex-col rounded-2xl h-full shadow-xl border border-white/20 overflow-hidden transition-all duration-300 hover:shadow-2xl">
         <MessageArea messages={messages} />
 

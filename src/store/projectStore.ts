@@ -1,29 +1,10 @@
 // src/store/projectStore.ts
+import type { ProjectData } from "@/types/project.types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type ProgressStatus = "Not Started" | "In Progress" | "Completed";
 
-interface Progress {
-  market_analysis: ProgressStatus;
-  competitive_analysis: ProgressStatus;
-  marketing_strategy: ProgressStatus;
-  financial_projection: ProgressStatus;
-  business_plan_generation: ProgressStatus;
-  implementation_timeline?: ProgressStatus;
-  executive_summary?: ProgressStatus;
-}
 
-interface ProjectData {
-  _id: string;
-  project_name: string;
-  clerk_id: string;
-  progress: Progress;
-  business_plan_generated: boolean;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
 
 interface ProjectStore {
   projects: ProjectData[];

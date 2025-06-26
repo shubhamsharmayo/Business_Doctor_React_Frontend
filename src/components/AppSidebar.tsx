@@ -1,9 +1,9 @@
 // src/components/Sidebar.tsx
-import { Home, MessageCircle, Menu } from "lucide-react";
+import { Home, Menu } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
-
+import TopMenubar from "./TopMenubar";
 const navItems = [
   { name: "Dashboard", icon: Home, to: "/client/dashboard" },
  // { name: "", icon: MessageCircle, to: "/client/chat" },
@@ -17,13 +17,13 @@ export default function AppSidebar() {
   return (
     <aside
       className={clsx(
-        "h-screen bg-gray-100 dark:bg-gray-900 dark:text-white text-black flex flex-col transition-all duration-300",
+        "h-screen bg-gray-50 dark:bg-gray-900 dark:text-white text-black flex flex-col transition-all duration-300",
         isOpen ? "w-64" : "w-16"
       )}
     >
       <div className="flex items-center justify-between p-4">
         <span className={clsx("text-lg font-bold", !isOpen && "hidden")}>
-          MyApp
+          <TopMenubar />
         </span>
         <button
           className="p-1 rounded-md "

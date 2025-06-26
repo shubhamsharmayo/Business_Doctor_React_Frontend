@@ -1,4 +1,4 @@
-import { Home, Menu } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   SignedIn,
@@ -23,9 +23,7 @@ export default function TopNavBar() {
 
       {/* Right side */}
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon">
-          <Home className="h-5 w-5" />
-        </Button>
+      
 
         {/* Show sign in button when user is signed out */}
         <SignedOut>

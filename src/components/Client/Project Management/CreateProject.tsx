@@ -32,7 +32,10 @@ export const CreateProject = () => {
         project_name: projectName,
         clerk_id: userId,
       });
-       showSuccess("Project created successfully!");
+      console.log("response while creating project",response)
+       showSuccess(`${response?.data?.data?.
+project_name
+} Project created successfully!`);
 
       // Clear inputs & close dialog
       setProjectName("");

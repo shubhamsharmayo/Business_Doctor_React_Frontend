@@ -1,7 +1,8 @@
 import AppSidebar  from "@/components/AppSidebar";
-import TopMenubar from "@/components/TopMenubar";
+
 import { fetchUserAllProjects } from "@/lib/api/project-management";
 import { useProjectStore } from "@/store/projectStore";
+import type { ProjectData } from "@/types/project.types";
 import { useUser } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -28,7 +29,7 @@ const ClientLayout = () => {
     data: projectData,
     isLoading,
     isError,
-  } = useQuery<ProjectData[], Error>({
+  } = useQuery({
     queryKey: ["fetchProjectDataDetails", clerkId], // Include clerkId in queryKey for better caching
     queryFn: () => UserAllProjects(clerkId!),
     enabled: !!clerkId,
@@ -60,9 +61,9 @@ const ClientLayout = () => {
 
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100vh-.5rem)]">
       {/* Top bar at the top */}
-      <TopMenubar />
+      
 
       {/* Main content area: sidebar + routed content */}
       <div className="flex flex-1 overflow-hidden">

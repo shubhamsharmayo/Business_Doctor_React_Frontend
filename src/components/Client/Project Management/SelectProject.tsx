@@ -4,46 +4,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { fetchUserAllProjects } from "@/lib/api/project-management";
-import { useUser } from "@clerk/clerk-react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+
 import { useProjectStore } from "@/store/projectStore"; // ✅ import zustand store
-import { useEffect } from "react";
+import type { ProjectData } from "@/types/project.types";
 
-
-interface ProjectData {
-  _id: string;
-  project_name: string;
-  clerk_id: string;
-  progress: Progress;
-  business_plan_generated: boolean;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+interface SelectProjectProps {
+  projectData: ProjectData[];
 }
 
-interface Progress {
-  market_analysis: ProgressStatus;
-  competitive_analysis: ProgressStatus;
-  marketing_strategy: ProgressStatus;
-  financial_projection: ProgressStatus;
-  business_plan_generation: ProgressStatus;
-  implementation_timeline?: ProgressStatus;
-  executive_summary?: ProgressStatus;
-}
-
-type ProgressStatus = "Not Started" | "In Progress" | "Completed";
-
-
-const SelectProject = ({projectData}) => {
+const SelectProject = ({projectData}:SelectProjectProps) => {
+console.log("projectData", projectData)
 
   const setSelectedProject = useProjectStore((state) => state.setSelectedProject);
 
  
 
-  const handleProjectSelect = (project: ProjectData) => {
-    
+  const handleProjectSelect = (project:ProjectData) => {
+    console.log("project", project)
       setSelectedProject(project); 
       // ✅ update zustand selected project
   };

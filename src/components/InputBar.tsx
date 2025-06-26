@@ -1,8 +1,23 @@
-import { useState } from "react"
+import type { SetStateAction } from "react";
 
-const InputBar = ({ currentMessage, setCurrentMessage, onSubmit }) => {
 
-    const handleChange = (e) => {
+export interface InputBarProps {
+  currentMessage: string;
+  setCurrentMessage: React.Dispatch<React.SetStateAction<string>>;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+}
+
+
+const InputBar: React.FC<InputBarProps> = ({ 
+    currentMessage, 
+    setCurrentMessage, 
+    onSubmit }) => {
+
+        console.log("currentMessage", currentMessage)
+        console.log("setCurrentMessage", setCurrentMessage)
+        console.log("onSubmit", onSubmit)
+
+    const handleChange = (e: { target: { value: SetStateAction<string>; }; }) => {
         setCurrentMessage(e.target.value)
     }
 
