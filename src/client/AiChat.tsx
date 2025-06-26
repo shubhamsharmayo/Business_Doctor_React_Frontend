@@ -34,6 +34,8 @@ const AiChat = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [checkpointId, setCheckpointId] = useState<string | null>(null);
 
+  const VITE_AI_BACKEND_URL = import.meta.env.VITE_AI_BACKEND;
+  console.log(VITE_AI_BACKEND_URL);
   const { userId } = useAuth();
 
   const selectedProject = useProjectStore((state) => state.selectedProject);
@@ -127,7 +129,7 @@ const AiChat = () => {
     setCurrentMessage("");
 
     try {
-      let url = `http://192.168.1.10:8000/chat_stream?message=${encodeURIComponent(
+      let url = `${VITE_AI_BACKEND_URL}/chat_stream?message=${encodeURIComponent(
         messageText
       )}/clerk_id=${encodeURIComponent(userId)}/project_id=${encodeURIComponent(selectedProject?._id)}/chat_type=${encodeURIComponent(chatType)}`;
       if (checkpointId)
