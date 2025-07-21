@@ -11,6 +11,7 @@ import {CreateProject} from '@/components/Client/Project Management/CreateProjec
 
 import { useProjectStore } from "@/store/projectStore";
 import type { ProjectData } from "@/types/project.types";
+import CoachList from "@/components/Client/CoachList";
 
 
 const ClientDashboard = () => {
@@ -22,6 +23,7 @@ const ClientDashboard = () => {
   
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
+      <CoachList/>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         <Button variant="outline" >
