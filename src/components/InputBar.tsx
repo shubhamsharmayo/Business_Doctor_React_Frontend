@@ -13,10 +13,6 @@ const InputBar: React.FC<InputBarProps> = ({
     setCurrentMessage, 
     onSubmit }) => {
 
-        console.log("currentMessage", currentMessage)
-        console.log("setCurrentMessage", setCurrentMessage)
-        console.log("onSubmit", onSubmit)
-
     const handleChange = (e: { target: { value: SetStateAction<string>; }; }) => {
         setCurrentMessage(e.target.value)
     }

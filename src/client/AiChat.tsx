@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import InputBar from "@/components/InputBar";
 import MessageArea from "@/components/MessageArea";
-import { saveUserChatSessionDataApiUrl } from "@/lib/api/chat";
 import { useAuth } from "@clerk/clerk-react";
 import { useProjectStore } from "@/store/projectStore";
 import { useParams } from "react-router";
 import axios from "axios";
 import { API_BASE_URL } from "@/lib/api_base_url";
 import type { Message } from "@/types/chat.types";
+import { v4 as uuidv4 } from "uuid";
 
 
 
@@ -18,7 +18,7 @@ const AiChat = () => {
 
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: 1,
+      id: uuidv4(),
       content:
         "Hello! I’m your AI business planning assistant. I’ll help you develop your business plan. What type of business are you planning to launch?",
       isUser: false,
@@ -35,32 +35,19 @@ const AiChat = () => {
 
   const selectedProject = useProjectStore((state) => state.selectedProject);
 
-  const saveChatSession = async (finalMessages: Message[]) => {
-    const payload = {
-      clerk_id: userId,
-      project_id: selectedProject?._id,
-      all_summarised_data: "",
-      message_Data: {
-        chat_type: chatType,
-        messages: finalMessages,
-      },
-    };
-
+  const saveChatSession = async (updatedMessages) => {
+    
     try {
-      const response = await fetch(saveUserChatSessionDataApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+      const response = await axios.post(
+        `${API_BASE_URL}/chats/chat-session/save/${userId}/${selectedProject?._id}/${chatType}`,{
+        content: updatedMessages,
       });
 
-      if (!response.ok) {
+      if (!response) {
         throw new Error("Failed to save chat session");
       }
 
-      const data = await response.json();
-      console.log("Chat session saved:", data);
+      console.log("Chat session saved:", response);
     } catch (error) {
       console.error("Error saving chat session:", error);
     }
@@ -100,8 +87,8 @@ const AiChat = () => {
     const messageText = currentMessage.trim();
     if (!messageText) return;
 
-    const userMessageId = messages.length + 1;
-    const aiMessageId = userMessageId + 1;
+    const userMessageId = uuidv4();
+    const aiMessageId = uuidv4();
 
     // Add user message
     setMessages((prev) => [
@@ -156,6 +143,7 @@ const AiChat = () => {
                   : msg
               )
             );
+
           } else if (data.type === "end") {
             eventSource.close();
 
@@ -167,8 +155,12 @@ const AiChat = () => {
                   : msg
               );
 
-              saveChatSession(updatedMessages);
-              return updatedMessages;
+              const last2Msg=updatedMessages.slice(-2)
+
+              console.log("updatedMessages to be saved into database",last2Msg);
+
+              saveChatSession(last2Msg);
+              return last2Msg;
             });
           }
         } catch (error) {

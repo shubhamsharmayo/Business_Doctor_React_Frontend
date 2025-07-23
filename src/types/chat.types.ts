@@ -4,7 +4,7 @@ export type MsgType = "message";
 
 
 export interface Message {
-  id: number;
+  id: string;
   content: string;
   isUser: boolean;
   type: MsgType;

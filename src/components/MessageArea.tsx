@@ -148,7 +148,7 @@ const cleanEscapedContent = (content: string) => {
 
 const MessageArea = ({ messages}:MessageAreaProps) => {
 
-  console.log("message area", messages);
+  //console.log("message area", messages);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
    useEffect(() => {
