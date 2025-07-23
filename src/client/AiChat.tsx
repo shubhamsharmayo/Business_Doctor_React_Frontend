@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import InputBar from "@/components/InputBar";
 import MessageArea from "@/components/MessageArea";
 import { useAuth } from "@clerk/clerk-react";
@@ -8,8 +8,6 @@ import axios from "axios";
 import { API_BASE_URL } from "@/lib/api_base_url";
 import type { Message } from "@/types/chat.types";
 import { v4 as uuidv4 } from "uuid";
-
-
 
 const AiChat = () => {
   const params = useParams();
@@ -28,20 +26,31 @@ const AiChat = () => {
 
   const [currentMessage, setCurrentMessage] = useState("");
   const [checkpointId, setCheckpointId] = useState<string | null>(null);
+  const [lastMsgs, setLastMsgs] = useState<Message[]>([]);
 
   const VITE_AI_BACKEND_URL = import.meta.env.VITE_AI_BACKEND;
   console.log(VITE_AI_BACKEND_URL);
   const { userId } = useAuth();
-
+  const msgLoaded = useRef(false);
   const selectedProject = useProjectStore((state) => state.selectedProject);
 
+  useEffect(() => {
+    if (msgLoaded.current) {
+      const last2Msg = messages.slice(-2);
+
+        console.log("Saving last 2 messages to backend:", last2Msg);
+        saveChatSession(last2Msg);
+    }
+  }, [msgLoaded.current,messages]);
+
   const saveChatSession = async (updatedMessages) => {
-    
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/chats/chat-session/save/${userId}/${selectedProject?._id}/${chatType}`,{
-        content: updatedMessages,
-      });
+        `${API_BASE_URL}/chats/chat-session/save/${userId}/${selectedProject?._id}/${chatType}`,
+        {
+          content: updatedMessages,
+        }
+      );
 
       if (!response) {
         throw new Error("Failed to save chat session");
@@ -111,16 +120,17 @@ const AiChat = () => {
     setCurrentMessage("");
 
     try {
-
       // ✅ Guard clause to prevent undefined values
-  if (!userId || !selectedProject?._id || !chatType) {
-    console.error("Missing required parameters for chat submission.");
-    return;
-  }
-  
+      if (!userId || !selectedProject?._id || !chatType) {
+        console.error("Missing required parameters for chat submission.");
+        return;
+      }
+
       let url = `${VITE_AI_BACKEND_URL}/chat_stream?message=${encodeURIComponent(
         messageText
-      )}&clerk_id=${encodeURIComponent(userId)}&project_id=${encodeURIComponent(selectedProject?._id)}&chat_type=${encodeURIComponent(chatType)}`;
+      )}&clerk_id=${encodeURIComponent(userId)}&project_id=${encodeURIComponent(
+        selectedProject?._id
+      )}&chat_type=${encodeURIComponent(chatType)}`;
       if (checkpointId)
         url += `&checkpoint_id=${encodeURIComponent(checkpointId)}`;
 
@@ -143,25 +153,32 @@ const AiChat = () => {
                   : msg
               )
             );
-
           } else if (data.type === "end") {
             eventSource.close();
 
             // Save full messages after AI has responded completely
+
             setMessages((prevMessages) => {
               const updatedMessages = prevMessages.map((msg) =>
                 msg.id === aiMessageId
                   ? { ...msg, content: streamedContent, isLoading: false }
                   : msg
               );
-
-              const last2Msg=updatedMessages.slice(-2)
-
-              console.log("updatedMessages to be saved into database",last2Msg);
-
-              saveChatSession(last2Msg);
-              return last2Msg;
+              msgLoaded.current = true;
+              // console.log("Saving full messages to backend:", updatedMessages);
+              return updatedMessages;
             });
+
+            msgLoaded.current = false;
+            // console.log("Saving full messages to backend:", messages);
+
+            // Save last 2 messages after state update
+            // setTimeout(() => {
+            //   const last2Msg = messages.slice(-2);
+
+            //   console.log("Saving last 2 messages to backend:", last2Msg);
+            //   saveChatSession(last2Msg);
+            // }, 2500);
           }
         } catch (error) {
           console.error("Invalid SSE content:", event.data, error);
