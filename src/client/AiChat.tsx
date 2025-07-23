@@ -1,18 +1,22 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import InputBar from "@/components/InputBar";
 import MessageArea from "@/components/MessageArea";
 import { useAuth } from "@clerk/clerk-react";
 import { useProjectStore } from "@/store/projectStore";
-import { useParams } from "react-router";
+import { useParams } from "react-router"; // ❗use react-router-dom for hook type safety
 import axios from "axios";
 import { API_BASE_URL } from "@/lib/api_base_url";
-import type { Message } from "@/types/chat.types";
+import type { ChatHistoryResponse, Message } from "@/types/chat.types";
 import { v4 as uuidv4 } from "uuid";
 
-const AiChat = () => {
-  const params = useParams();
+type ParamsType = Record<string, string | undefined>;
 
-  const chatType = params.chatType;
+
+
+const AiChat = () => {
+  const { chatType } = useParams<ParamsType>();
+  const { userId } = useAuth();
+  const selectedProject = useProjectStore((state) => state.selectedProject);
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -23,83 +27,69 @@ const AiChat = () => {
       type: "message",
     },
   ]);
-
-  const [currentMessage, setCurrentMessage] = useState("");
+  const [currentMessage, setCurrentMessage] = useState<string>("");
   const [checkpointId, setCheckpointId] = useState<string | null>(null);
-  const [lastMsgs, setLastMsgs] = useState<Message[]>([]);
+  const msgLoaded = useRef(false);
 
   const VITE_AI_BACKEND_URL = import.meta.env.VITE_AI_BACKEND;
-  console.log(VITE_AI_BACKEND_URL);
-  const { userId } = useAuth();
-  const msgLoaded = useRef(false);
-  const selectedProject = useProjectStore((state) => state.selectedProject);
 
-  useEffect(() => {
-    if (msgLoaded.current) {
-      const last2Msg = messages.slice(-2);
+  // 🧠 Save chat session to DB
+  const saveChatSession = useCallback(async(updatedMessages: Message[])=>{
 
-        console.log("Saving last 2 messages to backend:", last2Msg);
-        saveChatSession(last2Msg);
-    }
-  }, [msgLoaded.current,messages]);
-
-  const saveChatSession = async (updatedMessages) => {
+    if (!userId || !selectedProject?._id || !chatType) return;
+    
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/chats/chat-session/save/${userId}/${selectedProject?._id}/${chatType}`,
+        `${API_BASE_URL}/chats/chat-session/save/${userId}/${selectedProject._id}/${chatType}`,
         {
           content: updatedMessages,
         }
       );
-
-      if (!response) {
-        throw new Error("Failed to save chat session");
-      }
-
-      console.log("Chat session saved:", response);
+      console.log("Chat session saved:", response.data);
     } catch (error) {
       console.error("Error saving chat session:", error);
     }
-  };
+    
+  },[userId,selectedProject?._id,chatType]);
 
+  useEffect(() => {
   const fetchChatHistory = async () => {
+    if (!userId || !selectedProject?._id || !chatType) return;
+
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/chats/${userId}/${selectedProject?._id}/${chatType}`
+      const response = await axios.get<ChatHistoryResponse>(
+        `${API_BASE_URL}/chats/${userId}/${selectedProject._id}/${chatType}`
       );
-      console.log("Chat history fetched:", response.data);
-      return response.data; // return the actual data
+      const data = response.data;
+
+      if (data?.message_Data?.messages) {
+        setMessages(data.message_Data.messages);
+      }
     } catch (error) {
       console.error("Error fetching chat history:", error);
-      return null;
     }
   };
 
+  fetchChatHistory();
+}, [userId, selectedProject?._id, chatType]);
+
+
   useEffect(() => {
-    const loadChatHistory = async () => {
-      if (userId && selectedProject?._id && chatType) {
-        const data = await fetchChatHistory(); // ⬅️ await it
-        console.log("fetched data", data?.message_Data?.messages);
+    if (msgLoaded.current) {
+      const last2 = messages.slice(-2);
+      saveChatSession(last2);
+      msgLoaded.current = false; // reset after saving
+    }
+  }, [messages,saveChatSession]);
 
-        if (data?.message_Data?.messages) {
-          setMessages(data.message_Data.messages);
-        }
-      }
-    };
-
-    loadChatHistory();
-  }, [userId, selectedProject?._id, chatType]);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    console.log("messages", messages);
     const messageText = currentMessage.trim();
-    if (!messageText) return;
+    if (!messageText || !userId || !selectedProject?._id || !chatType) return;
 
     const userMessageId = uuidv4();
     const aiMessageId = uuidv4();
 
-    // Add user message
     setMessages((prev) => [
       ...prev,
       {
@@ -120,27 +110,22 @@ const AiChat = () => {
     setCurrentMessage("");
 
     try {
-      // ✅ Guard clause to prevent undefined values
-      if (!userId || !selectedProject?._id || !chatType) {
-        console.error("Missing required parameters for chat submission.");
-        return;
-      }
-
       let url = `${VITE_AI_BACKEND_URL}/chat_stream?message=${encodeURIComponent(
         messageText
       )}&clerk_id=${encodeURIComponent(userId)}&project_id=${encodeURIComponent(
-        selectedProject?._id
+        selectedProject._id
       )}&chat_type=${encodeURIComponent(chatType)}`;
-      if (checkpointId)
+
+      if (checkpointId) {
         url += `&checkpoint_id=${encodeURIComponent(checkpointId)}`;
+      }
 
       const eventSource = new EventSource(url);
       let streamedContent = "";
 
-      eventSource.onmessage = (event) => {
+      eventSource.onmessage = (event: MessageEvent) => {
         try {
           const data = JSON.parse(event.data);
-
           if (data.type === "checkpoint") {
             setCheckpointId(data.checkpoint_id);
           } else if (data.type === "content") {
@@ -156,8 +141,6 @@ const AiChat = () => {
           } else if (data.type === "end") {
             eventSource.close();
 
-            // Save full messages after AI has responded completely
-
             setMessages((prevMessages) => {
               const updatedMessages = prevMessages.map((msg) =>
                 msg.id === aiMessageId
@@ -165,20 +148,8 @@ const AiChat = () => {
                   : msg
               );
               msgLoaded.current = true;
-              // console.log("Saving full messages to backend:", updatedMessages);
               return updatedMessages;
             });
-
-            msgLoaded.current = false;
-            // console.log("Saving full messages to backend:", messages);
-
-            // Save last 2 messages after state update
-            // setTimeout(() => {
-            //   const last2Msg = messages.slice(-2);
-
-            //   console.log("Saving last 2 messages to backend:", last2Msg);
-            //   saveChatSession(last2Msg);
-            // }, 2500);
           }
         } catch (error) {
           console.error("Invalid SSE content:", event.data, error);
@@ -201,7 +172,7 @@ const AiChat = () => {
         );
       };
     } catch (error) {
-      console.error("Error setting up EventSource:", error);
+      console.error("Error in EventSource setup:", error);
     }
   };
 

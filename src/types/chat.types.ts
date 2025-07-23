@@ -1,6 +1,11 @@
 
 export type MsgType = "message";
 
+export interface ChatHistoryResponse {
+  message_Data: {
+    messages: Message[];
+  };
+}
 
 
 export interface Message {
