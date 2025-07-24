@@ -35,7 +35,8 @@ const AiChat = () => {
 
   // 🧠 Save chat session to DB
   const saveChatSession = useCallback(async(updatedMessages: Message[])=>{
-
+     
+    console.log("✅ Saving chat session...");
     if (!userId || !selectedProject?._id || !chatType) return;
     
     try {
