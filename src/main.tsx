@@ -24,8 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     afterSignOutUrl='/'
     
     >
-       
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
       <App />
     </QueryClientProvider>
     

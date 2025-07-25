@@ -38,7 +38,7 @@ export default function CoachList() {
   if (loading) return <p className="text-center">Loading coaches...</p>;
 
   return (
-    <div>
+    <div className='my-6'>
          <h2 className="text-2xl font-semibold mb-4">Select Coaches</h2>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
 

@@ -1,4 +1,5 @@
 import AppSidebar  from "@/components/AppSidebar";
+import TopNavBar from "@/components/TopMenubar";
 
 import { fetchUserAllProjects } from "@/lib/api/project-management";
 import { useProjectStore } from "@/store/projectStore";
@@ -63,7 +64,7 @@ const ClientLayout = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-.5rem)]">
       {/* Top bar at the top */}
-      
+      <TopNavBar/>
 
       {/* Main content area: sidebar + routed content */}
       <div className="flex flex-1 overflow-hidden">
