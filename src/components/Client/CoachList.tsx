@@ -67,5 +67,6 @@ export default function CoachList() {
       ))}
     </div>
     </div>
+
   );
 }
