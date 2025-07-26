@@ -1,8 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+
+import type { FC } from 'react'; // ✅ Type-only import
+
 import { useUser } from "@clerk/clerk-react";
 import TopNavBar from "./TopMenubar";
 import { useNavigate } from 'react-router';
-import { Sparkles, Target, BarChart3, Users, CheckCircle, ArrowRight, Star, Zap, Brain, TrendingUp, DollarSign, FileText, Shield } from 'lucide-react';
+import { Sparkles, BarChart3, CheckCircle, ArrowRight, Star, Zap, Brain, TrendingUp, DollarSign, FileText, Shield } from 'lucide-react';
+
+type AnimatedCounterProps = {
+  end: number;
+  duration?: number; // in ms
+};
+
+type FeatureCardProps = {
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  title: string;
+  description: string;
+  delay?: number; // in ms
+};
 
 const features = [
   {
@@ -39,12 +54,12 @@ const FloatingElements = () => (
   </div>
 );
 
-const AnimatedCounter = ({ end, duration = 2000 }) => {
-  const [count, setCount] = useState(0);
+const AnimatedCounter : FC<AnimatedCounterProps> = ({ end, duration = 2000 }) => {
+  const [count, setCount] = useState<number>(0);
   
   useEffect(() => {
-    let startTime;
-    const animate = (currentTime) => {
+    let startTime : number | undefined;
+    const animate = (currentTime:number) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
       setCount(Math.floor(progress * end));
@@ -56,7 +71,7 @@ const AnimatedCounter = ({ end, duration = 2000 }) => {
   return <span>{count}</span>;
 };
 
-const FeatureCard = ({ icon: Icon, title, description, delay = 0 }) => {
+const FeatureCard : FC<FeatureCardProps> = ({ icon: Icon, title, description, delay = 0 }) => {
   const [isVisible, setIsVisible] = useState(false);
   
   useEffect(() => {
