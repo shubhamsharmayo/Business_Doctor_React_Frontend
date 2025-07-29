@@ -17,6 +17,16 @@ import { NODE_API_BASE_URL,NEXT_BASE_URL } from "@/lib/api_base_url";
 
 import { useUser } from "@clerk/clerk-react";
 
+type Coach = {
+  id: string;
+  name: string;
+  imageUrl: string | null;
+  industry: string | null;
+  experience: string | null;
+  events: { title: string }[];
+  clerkUserId: string;
+  username: string;
+};
 
 const ClientDashboard = () => {
 
@@ -27,7 +37,8 @@ const ClientDashboard = () => {
   
    const [assignedCoach, setAssignedCoach] = useState<string | null>(null); //it will find assigned coach id
   
-  const [coachData, setCoachData] = useState<any>(null); // it will fetch full coach info
+  const [coachData, setCoachData] = useState<Coach | null>(null);
+
 
   useEffect(() => {
   if (!user?.id) return;
@@ -59,6 +70,8 @@ const ClientDashboard = () => {
 }, [user?.id]);
 
   if(!isLoaded) return <div>Loading user...</div>;
+  
+ if (!coachData) return <div>Loading coach data...</div>;
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">

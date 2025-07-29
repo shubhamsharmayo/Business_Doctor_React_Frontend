@@ -15,9 +15,18 @@ type Coach = {
   experience: string | null;
   events: { title: string }[];
   clerkUserId: string;
+  username: string;
 };
 
-export default function CoachList({assignedCoach,coachData}) {
+type Props ={
+  assignedCoach: string | null;
+  coachData: Coach
+}
+
+export default function CoachList({assignedCoach,coachData}:Props) {
+
+  console.log("assignedCoach",assignedCoach);
+  console.log("coachData",coachData);
 
   const [selectingId, setSelectingId] = useState<string | null>(null);
 
@@ -109,9 +118,6 @@ export default function CoachList({assignedCoach,coachData}) {
   window.open(url, '_blank');
 };
 
-
-
-
   if (loading && !isLoaded) return <p className="text-center my-8">Loading coaches...</p>;
 
   return (
@@ -134,6 +140,7 @@ export default function CoachList({assignedCoach,coachData}) {
       <p className="text-sm text-gray-600"><strong>Experience:</strong> {coachData.experience || 'Not mentioned'}</p>
 
       <Button onClick={() => handleBookSession(coachData.username)} className='my-4' >Book Session</Button>
+      
     </div>
   ) : (
     // Case 2: No coach assigned yet
