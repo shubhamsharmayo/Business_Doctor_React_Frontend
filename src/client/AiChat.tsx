@@ -5,7 +5,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { useProjectStore } from "@/store/projectStore";
 import { useParams } from "react-router"; // ❗use react-router-dom for hook type safety
 import axios from "axios";
-import { API_BASE_URL } from "@/lib/api_base_url";
+import { NODE_API_BASE_URL } from "@/lib/api_base_url";
 import type { ChatHistoryResponse, Message } from "@/types/chat.types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -41,7 +41,7 @@ const AiChat = () => {
     
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/chats/chat-session/save/${userId}/${selectedProject._id}/${chatType}`,
+        `${NODE_API_BASE_URL}/chats/chat-session/save/${userId}/${selectedProject._id}/${chatType}`,
         {
           content: updatedMessages,
         }
@@ -59,7 +59,7 @@ const AiChat = () => {
 
     try {
       const response = await axios.get<ChatHistoryResponse>(
-        `${API_BASE_URL}/chats/${userId}/${selectedProject._id}/${chatType}`
+        `${NODE_API_BASE_URL}/chats/${userId}/${selectedProject._id}/${chatType}`
       );
       const data = response.data;
 
@@ -178,7 +178,7 @@ const AiChat = () => {
   };
 
   return (
-    <div className="flex justify-center bg-gradient-to-br from-slate-50 to-gray-100 h-[calc(100vh-50px)] py-3 px-4">
+    <div className="flex justify-center bg-gradient-to-br from-slate-50 to-gray-100 h-[calc(100vh-50px)] py-3 px-4 my-8">
       <div className="w-full bg-white/80 backdrop-blur-sm flex flex-col rounded-2xl h-full shadow-xl border border-white/20 overflow-hidden transition-all duration-300 hover:shadow-2xl">
         <MessageArea messages={messages} />
 

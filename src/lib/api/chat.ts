@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/lib/api_base_url";
+import { NODE_API_BASE_URL } from "@/lib/NODE_API_BASE_URL";
 
 //save user chat session data
-export const saveUserChatSessionDataApiUrl = `${API_BASE_URL}/chats/chat-session/save`;
+export const saveUserChatSessionDataApiUrl = `${NODE_API_BASE_URL}/chats/chat-session/save`;

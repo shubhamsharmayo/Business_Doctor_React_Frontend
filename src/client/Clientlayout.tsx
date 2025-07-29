@@ -12,19 +12,27 @@ import { Outlet } from "react-router";
 
 const ClientLayout = () => {
 
-  const { user } = useUser();
-  const clerkId = user?.id;
+  const { isLoaded,user } = useUser();
 
+  if (!isLoaded) return <div>Loading user...</div>;
+
+  const clerkId = user?.id;
+  console.log("Clerk ID:", clerkId);
 
   const setProjects = useProjectStore(
     (state) => state.setProjects
   );
 
  
+
   const UserAllProjects = async (clerkId:string): Promise<ProjectData[]> => {
-      const { data } = await axios.get(`${fetchUserAllProjects}/${clerkId}`);
+       console.log("Fetching projects for:", clerkId);
+    const { data } = await axios.get(`${fetchUserAllProjects}/${clerkId}`);
       return data?.data;
     };
+
+    
+
   
     const {
     data: projectData,
@@ -33,6 +41,8 @@ const ClientLayout = () => {
   } = useQuery({
     queryKey: ["fetchProjectDataDetails", clerkId], // Include clerkId in queryKey for better caching
     queryFn: () => UserAllProjects(clerkId!),
+    retry: 2,
+    retryDelay: 1000,
     enabled: !!clerkId,
   });
   
@@ -50,6 +60,8 @@ const ClientLayout = () => {
       }
     }
   }, [projectData]);
+
+  
 
   {
     if (isLoading) {

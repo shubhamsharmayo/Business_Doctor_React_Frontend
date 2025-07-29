@@ -1,13 +1,13 @@
 // utils/verifyUser.ts
 
-import {API_BASE_URL} from '@/lib/api_base_url.ts';
+import {NODE_API_BASE_URL} from '@/lib/NODE_API_BASE_URL.ts';
 export async function verifyUser(isSignedIn, userId, pathname) {
   if (!isSignedIn) return { allowed: false, redirectTo: '/' };
 
   const prefix = pathname.split('/')[1];
 
   try {
-    const res = await fetch(`${API_BASE_URL}/user/find-user`, {
+    const res = await fetch(`${NODE_API_BASE_URL}/user/find-user`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ clerkId: userId }),

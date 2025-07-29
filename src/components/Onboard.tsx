@@ -13,7 +13,7 @@ export default function Onboard() {
 
     const syncUser = async () => {
       try {
-        await axios.post(`${import.meta.env.VITE_API_URL}/user/register`, {
+        await axios.post(`${import.meta.env.VITE_NODE_API_URL}/user/register`, {
           clerkId: user.id,
           name: `${user.username}`,
           email: user.primaryEmailAddress?.emailAddress,
