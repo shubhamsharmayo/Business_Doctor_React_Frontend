@@ -30,6 +30,8 @@ type Coach = {
 
 const ClientDashboard = () => {
 
+  const [fetchingUserAndCoach, setFetchingUserAndCoach] = useState(false);
+
   const {isLoaded,user}=useUser();
 
   const selectedProject = useProjectStore((state) => state.selectedProject);
@@ -44,6 +46,7 @@ const ClientDashboard = () => {
   if (!user?.id) return;
 
   const fetchUserAndCoach = async () => {
+    setFetchingUserAndCoach(true);
     try {
       const res = await fetch(`${NODE_API_BASE_URL}/user/find-user/${user.id}`);
       const data = await res.json();
@@ -63,20 +66,24 @@ const ClientDashboard = () => {
       }
     } catch (err) {
       console.error("Failed to fetch user or coach:", err);
+
+    }
+    finally{
+      setFetchingUserAndCoach(false);
     }
   };
 
   fetchUserAndCoach();
 }, [user?.id]);
 
-  if(!isLoaded) return <div>Loading user...</div>;
+  // if(!isLoaded || !fetchingUserAndCoach || !coachData) return <div>Loading user...</div>;
   
- if (!coachData) return <div>Loading coach data...</div>;
+ 
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {coachData && <CoachList assignedCoach={assignedCoach} coachData={coachData} />}
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"> 
         <Button variant="outline" >
           <SelectProject projectData={projects} />

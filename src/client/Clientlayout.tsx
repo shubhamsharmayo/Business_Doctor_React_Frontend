@@ -14,14 +14,13 @@ const ClientLayout = () => {
 
   const { isLoaded,user } = useUser();
 
-  if (!isLoaded) return <div>Loading user...</div>;
+  // All hooks at top level
+  const setProjects = useProjectStore((state) => state.setProjects);
+  const selectedProject = useProjectStore((state) => state.selectedProject);
+  const setSelectedProject = useProjectStore((state) => state.setSelectedProject);
 
   const clerkId = user?.id;
   console.log("Clerk ID:", clerkId);
-
-  const setProjects = useProjectStore(
-    (state) => state.setProjects
-  );
 
  
 
@@ -56,27 +55,28 @@ const ClientLayout = () => {
     if (existingSelected) {
       const updated = projectData.find((p) => p._id === existingSelected._id);
       if (updated) {
-        useProjectStore.getState().setSelectedProject(updated);
+        setSelectedProject(updated);
       }
     }
-  }, [projectData]);
+  }, [projectData, selectedProject, setProjects, setSelectedProject]);
 
   
 
-  {
-    if (isLoading) {
-      return <div>Loading...</div>;
+  
+    if (isLoading || !isLoaded) {
+      return <div className="my-24">Loading...</div>;
     }
     if (isError) {
-      return <div>Error: Error occured</div>;
+      return <div className="my-24">Error: Error occured</div>;
     }
-  }
+  
 
-
+   
   return (
-    <div className="flex flex-col h-[calc(100vh-.5rem)]">
+    <div className="flex flex-col h-[calc(100vh-.5rem)] my-8">
       {/* Top bar at the top */}
       <TopNavBar/>
+      <p>Client layout </p>
 
       {/* Main content area: sidebar + routed content */}
       <div className="flex flex-1 overflow-hidden">
