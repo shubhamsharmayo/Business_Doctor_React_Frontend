@@ -76,7 +76,11 @@ const ClientDashboard = () => {
   fetchUserAndCoach();
 }, [user?.id]);
 
-  // if(!isLoaded || !fetchingUserAndCoach || !coachData) return <div>Loading user...</div>;
+  if( !isLoaded ) return <div>Loading user...</div>;
+
+  if(fetchingUserAndCoach){
+     console.log("fetchingUserAndCoach",fetchingUserAndCoach);
+  }
   
  
 
