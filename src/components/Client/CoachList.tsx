@@ -20,7 +20,7 @@ type Coach = {
 
 type Props ={
   assignedCoach: string | null;
-  coachData: Coach
+  coachData: Coach | null;
 }
 
 export default function CoachList({assignedCoach,coachData}:Props) {
@@ -164,7 +164,7 @@ export default function CoachList({assignedCoach,coachData}:Props) {
             onClick={() => handleSelectCoach(coach.clerkUserId)}
             disabled={selectingId === coach.clerkUserId}
           >
-            {selectingId === coach.id ? 'Selecting...' : 'Select Coach'}
+            {selectingId === coach.clerkUserId ? 'Selecting...' : 'Select Coach'}
           </Button>
         </div>
       ))}

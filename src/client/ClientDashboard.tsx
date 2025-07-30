@@ -75,8 +75,8 @@ const ClientDashboard = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <CoachList assignedCoach={assignedCoach} coachData={coachData}/>
-
+      {coachData && <CoachList assignedCoach={assignedCoach} coachData={coachData} />}
+      
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"> 
         <Button variant="outline" >
           <SelectProject projectData={projects} />

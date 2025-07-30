@@ -88,7 +88,12 @@ const FeatureCard : FC<FeatureCardProps> = ({ icon: Icon, title, description, de
         </div>
         <h3 className="text-2xl font-bold mb-4 text-gray-900">{title}</h3>
         <p className="text-gray-600 leading-relaxed">{description}</p>
+        
+        {/* Version tracking */}
+        <h4>v0.16 Beta</h4>
+        
       </div>
+
     </div>
   );
 };
