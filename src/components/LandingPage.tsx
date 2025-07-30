@@ -90,7 +90,7 @@ const FeatureCard : FC<FeatureCardProps> = ({ icon: Icon, title, description, de
         <p className="text-gray-600 leading-relaxed">{description}</p>
         
         {/* Version tracking */}
-        <h4>v0.16 Beta</h4>
+        <h4>v0.17 Beta</h4>
         
       </div>
 
