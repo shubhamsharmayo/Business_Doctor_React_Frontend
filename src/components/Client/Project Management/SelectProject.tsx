@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,8 +18,6 @@ console.log("projectData", projectData)
 
   const setSelectedProject = useProjectStore((state) => state.setSelectedProject);
 
- 
-
   const handleProjectSelect = (project:ProjectData) => {
     console.log("project", project)
       setSelectedProject(project); 
@@ -29,7 +28,11 @@ console.log("projectData", projectData)
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>Select Projects</DropdownMenuTrigger>
+      <DropdownMenuTrigger>
+        <Button>
+          Select Projects
+        </Button>
+      </DropdownMenuTrigger>
       <DropdownMenuContent>
         {projectData?.map((project) => (
           <DropdownMenuItem

@@ -92,12 +92,12 @@ const ClientDashboard = () => {
       {/* Project Management Section */}
       <section className="mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <Button variant="outline" className="h-auto py-3">
+          
             <SelectProject projectData={projects} />
-          </Button>
-          <Button className="h-auto py-3">
+      
+         
             <CreateProject />
-          </Button>
+          
         </div>
 
         {!selectedProject ? (
