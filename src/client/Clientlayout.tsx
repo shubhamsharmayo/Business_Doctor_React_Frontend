@@ -73,18 +73,18 @@ const ClientLayout = () => {
 
    
   return (
-    <div className="flex flex-col h-[calc(100vh-.5rem)] my-8">
+    <div className="flex flex-col h-[calc(100vh-4rem)]">
       {/* Top bar at the top */}
       <TopNavBar/>
-      <p>Client layout </p>
+      {/* <p>Client layout </p> */}
 
       {/* Main content area: sidebar + routed content */}
-      <div className="flex flex-1 overflow-hidden">
-        <div className=" border-r">
+      <div className="flex">
+        
           <AppSidebar />
-        </div>
+        
 
-        <main className="flex-1 overflow-auto p-4">
+        <main className="flex-1 p-4">
           <Outlet />
         </main>
       </div>
