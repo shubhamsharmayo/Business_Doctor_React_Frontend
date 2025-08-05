@@ -28,6 +28,7 @@ const ClientDashboard = () => {
   const [assignedCoach, setAssignedCoach] = useState<string | null>(null);
   const [coachData, setCoachData] = useState<Coach | null>(null);
 
+  console.log("coachData", coachData);
   useEffect(() => {
     if (!user?.id) return;
 
@@ -90,12 +91,12 @@ const ClientDashboard = () => {
     <div className="container mx-auto px-4 py-8">
       {/* Coach Section */}
       <section className="mb-8">
-        {coachData ? (
-          <CoachList assignedCoach={assignedCoach} coachData={coachData} />
-        ) : (
+        {isLoading ? (
           <div className="bg-white rounded-lg shadow p-6 text-center">
             <p className="text-gray-600">No coach assigned yet</p>
           </div>
+        ) : (
+          <CoachList assignedCoach={assignedCoach} coachData={coachData} />
         )}
       </section>
 

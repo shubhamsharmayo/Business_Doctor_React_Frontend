@@ -14,9 +14,10 @@ import { Button } from "@/components/ui/button";
 import { createProjectApiUrl } from "@/lib/api/project-management";
 import { showError, showSuccess } from "@/lib/toastUtils";
 
-
+import { useQueryClient } from "@tanstack/react-query";
 
 export const CreateProject = () => {
+  const queryClient = useQueryClient();
   const { userId } = useAuth();
   const [projectName, setProjectName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,10 +33,13 @@ export const CreateProject = () => {
         project_name: projectName,
         clerk_id: userId,
       });
-      console.log("response while creating project",response)
-       showSuccess(`${response?.data?.data?.
-project_name
-} Project created successfully!`);
+      console.log("response while creating project", response);
+      showSuccess(
+        `${response?.data?.data?.project_name} Project created successfully!`
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["fetchProjectDataDetails", userId],
+      });
 
       // Clear inputs & close dialog
       setProjectName("");
