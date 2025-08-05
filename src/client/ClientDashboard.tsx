@@ -125,7 +125,7 @@ const ClientDashboard = () => {
                   <h2 className="text-xl dark:text-white font-semibold text-gray-800">
                     AI Assistant
                   </h2>
-                  <span className="inline-flex dark:text-white items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  <span className="inline-flex dark:text-green items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                     Online
                   </span>
                 </div>
@@ -136,13 +136,13 @@ const ClientDashboard = () => {
                 </p>
 
                 <div className="space-y-3 mb-6">
-                  <button className="w-full text-left p-3 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                  <button className="w-full text-left p-3 border border-blue-200 rounded-lg hover:bg-blue-50 dark:hover:text-black transition-colors">
                     Complete my competitive analysis
                   </button>
-                  <button className="w-full text-left p-3 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                  <button className="w-full text-left p-3 border border-blue-200 rounded-lg hover:bg-blue-50 dark:hover:text-black transition-colors">
                     Generate financial projections
                   </button>
-                  <button className="w-full text-left p-3 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                  <button className="w-full text-left p-3 border border-blue-200 rounded-lg hover:bg-blue-50 dark:hover:text-black transition-colors">
                     Refine my marketing strategy
                   </button>
                 </div>

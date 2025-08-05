@@ -18,8 +18,8 @@ const InputBar: React.FC<InputBarProps> = ({
     }
 
     return (
-        <form onSubmit={onSubmit} className="p-4 bg-white">
-            <div className="flex items-center bg-[#F9F9F5] rounded-full p-3 shadow-md border border-gray-200">
+        <form onSubmit={onSubmit} className="p-4 dark:bg-gray-700 bg-white">
+            <div className="flex dark:bg-gray-700 items-center bg-[#F9F9F5] rounded-full p-3 shadow-md border border-gray-200">
                 <button
                     type="button"
                     className="p-2 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-all duration-200"
@@ -33,7 +33,7 @@ const InputBar: React.FC<InputBarProps> = ({
                     placeholder="Type a message"
                     value={currentMessage}
                     onChange={handleChange}
-                    className="flex-grow px-4 py-2 bg-transparent focus:outline-none text-gray-700"
+                    className="flex-grow px-4 py-2 dark:text-white bg-transparent focus:outline-none text-gray-700"
                 />
                 <button
                     type="button"

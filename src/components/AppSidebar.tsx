@@ -37,7 +37,7 @@ export default function AppSidebar() {
             key={name}
             to={to}
             className={clsx(
-              "flex items-center gap-3 px-4 py-3 text-sm font-medium transition hover:bg-gray-700",
+              "flex items-center gap-3 px-4 py-3 text-sm font-medium transition hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-black",
               pathname === to ? "bg-gray-300" : ""
             )}
           >

@@ -159,11 +159,11 @@ const MessageArea = ({ messages}:MessageAreaProps) => {
 
   return (
     <div
-      className="flex-grow overflow-y-auto bg-gradient-to-b from-slate-50 via-gray-50 to-slate-100 border-b 
+      className="flex-grow overflow-y-auto   dark:bg-gray-700  border-b 
         border-slate-200/50"
       style={{ minHeight: 0 }}
     >
-      <div className="mx-auto p-6 space-y-6">
+      <div className="mx-auto  p-6 space-y-6">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -173,8 +173,8 @@ const MessageArea = ({ messages}:MessageAreaProps) => {
           >
             {/* AI Icon - Left side for AI messages */}
             {!message.isUser && (
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-md">
-                <LucideSparkles className="w-4 h-4 text-white" />
+              <div className="flex-shrink-0 w-8 h-8  rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-md">
+                <LucideSparkles className="w-4 h-4  text-white" />
               </div>
             )}
 
@@ -188,16 +188,16 @@ const MessageArea = ({ messages}:MessageAreaProps) => {
 
               {/* Message Content */}
               <div
-                className={`rounded-2xl py-4 px-6 transition-all duration-200 ${
+                className={`rounded-2xl dark:bg-gray-700 py-4 px-6 transition-all duration-200 ${
                   message.isUser
-                    ? "bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 text-white rounded-tr-md shadow-lg hover:shadow-xl border border-indigo-500/20"
-                    : "bg-white/95 backdrop-blur-sm text-slate-800 border border-slate-200/60 rounded-tl-md shadow-sm hover:shadow-md hover:bg-white"
+                    ? "bg-gradient-to-br dark:text-white from-indigo-600 via-purple-600 to-violet-700 text-white rounded-tr-md shadow-lg hover:shadow-xl border border-indigo-500/20"
+                    : "bg-white/95 dark:text-white backdrop-blur-sm text-slate-800 border border-slate-200/60 rounded-tl-md shadow-sm hover:shadow-md hover:bg-white"
                 }`}
               >
                 {message.isLoading ? (
                   <PremiumTypingAnimation />
                 ) : (
-                  <div className="prose prose-sm prose-slate max-w-none">
+                  <div className="prose prose-sm  prose-slate max-w-none">
                     <ReactMarkdown>{cleanEscapedContent(message.content)}</ReactMarkdown>
                   </div>
                 )}
@@ -206,7 +206,7 @@ const MessageArea = ({ messages}:MessageAreaProps) => {
 
             {/* User Icon - Right side for user messages */}
             {message.isUser && (
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md">
+              <div className="flex-shrink-0  w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md">
                 <User className="w-4 h-4 text-white" />
               </div>
             )}

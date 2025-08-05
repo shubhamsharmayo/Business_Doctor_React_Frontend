@@ -178,12 +178,12 @@ const AiChat = () => {
   };
 
   return (
-    <div className="flex justify-center bg-gradient-to-br from-slate-50 to-gray-100 h-[calc(100vh-100px)] py-1 px-4 my-1">
-      <div className="w-full bg-white/80 backdrop-blur-sm flex flex-col rounded-2xl h-full shadow-xl border border-white/20 overflow-hidden transition-all duration-300 hover:shadow-2xl">
+    <div className="flex justify-center  h-[calc(100vh-100px)] py-1 px-4 my-1">
+      <div className="w-full bg-white/80   backdrop-blur-sm flex flex-col rounded-2xl h-full shadow-xl border border-white/20 overflow-hidden transition-all duration-300 hover:shadow-2xl">
         <MessageArea messages={messages} />
 
         {!selectedProject ? (
-          <div className="text-center text-sm bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-xl px-6 py-3 mx-4 mb-4 shadow-lg backdrop-blur-sm border border-violet-300/30 font-medium">
+          <div className="text-center dark:bg-gray-700 text-sm bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-xl px-6 py-3 mx-4 mb-4 shadow-lg backdrop-blur-sm border border-violet-300/30 font-medium">
             Please select a project to continue
           </div>
         ) : (
