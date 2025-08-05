@@ -24,14 +24,13 @@ import { updateProgressStatus } from "@/lib/api/project-management"; // assumes 
 import { useQueryClient } from "@tanstack/react-query";
 import type { ProgressControlProps } from "@/types/project.types";
 
-const ProgressControl = ({ 
-  projectName, 
-  progressItem, 
-  projectId }:ProgressControlProps) => {
-
-   
+const ProgressControl = ({
+  projectName,
+  progressItem,
+  projectId,
+}: ProgressControlProps) => {
   const [selectedStatus, setSelectedStatus] = useState("");
-   const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const handleUpdate = async () => {
@@ -45,13 +44,12 @@ const ProgressControl = ({
 
       const payload = {
         [progressItem]: selectedStatus,
-         // ✅ dynamic key
+        // ✅ dynamic key
       };
 
       const response = await axios.patch(url, payload);
       // ✅ Invalidate the query to refetch updated data
       queryClient.invalidateQueries({ queryKey: ["fetchProjectDataDetails"] });
-
 
       console.log("✅ Progress updated:", response.data);
     } catch (error) {
@@ -59,16 +57,12 @@ const ProgressControl = ({
     }
 
     setOpen(false);
-    
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-        >
+        <Button variant="outline" size="icon">
           <Forward />
         </Button>
       </DialogTrigger>
