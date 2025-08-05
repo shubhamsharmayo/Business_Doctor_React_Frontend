@@ -3,6 +3,7 @@ import { Home, Menu } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
+import ThemeToggle from "./ThemeToggle";
 
 const navItems = [
   { name: "Dashboard", icon: Home, to: "/client/dashboard" },
@@ -16,14 +17,18 @@ export default function AppSidebar() {
   return (
     <aside
       className={clsx(
-        "h-[calc(100vh-65px)] bg-gray-50 dark:bg-gray-900 dark:text-white text-black flex flex-col transition-all duration-300 ",
+        "h-[calc(100vh-65px)] bg-gray-50 dark:bg-gray-700 dark:text-white text-black flex flex-col transition-all duration-300 ",
         isOpen ? "w-64" : "w-16"
       )}
     >
-      <div className="flex items-center  p-4">
-        <button className="p-1 rounded-md " onClick={() => setIsOpen(!isOpen)}>
+      <div className="flex justify-between  p-4">
+        <button className=" p-1 rounded-md " onClick={() => setIsOpen(!isOpen)}>
           <Menu size={20} />
+          
+            
         </button>
+        {isOpen && <span><ThemeToggle /></span>}
+            
       </div>
 
       <nav className="space-y-1">
