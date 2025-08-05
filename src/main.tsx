@@ -19,16 +19,19 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-    <ClerkProvider 
-    publishableKey={PUBLISHABLE_KEY} 
-    afterSignOutUrl='/'
-    
-    >
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-    
-    </ClerkProvider>
-     </BrowserRouter>
+      <ClerkProvider
+        publishableKey={PUBLISHABLE_KEY}
+        afterSignOutUrl='/'
+
+      >
+        <QueryClientProvider client={queryClient}>
+
+          <App />
+
+
+        </QueryClientProvider>
+
+      </ClerkProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 )

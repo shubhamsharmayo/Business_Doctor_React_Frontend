@@ -8,9 +8,10 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 
+
 export default function TopNavBar() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full h-14 px-4 flex items-center justify-between shadow-sm bg-white/90 backdrop-blur-md border-b border-gray-200/50">
+    <header className="  w-full h-14 px-4 py-4 flex items-center justify-between shadow-sm bg-white/90 backdrop-blur-md border-b border-gray-200/50">
     {/* Left side */}
     <div className="flex items-center gap-3">
       <h1 className="text-xl font-semibold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -19,11 +20,11 @@ export default function TopNavBar() {
     </div>
 
     {/* Center Navigation - Hidden on mobile */}
-    <div className="hidden md:flex items-center space-x-8">
+    {/* <div className="hidden md:flex items-center space-x-8">
       <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Features</a>
       <a href="#validation" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Validation</a>
       <a href="#pricing" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Pricing</a>
-    </div>
+    </div> */}
 
     {/* Right side */}
     <div className="flex items-center gap-4">
