@@ -4,11 +4,9 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
 
-
 const navItems = [
   { name: "Dashboard", icon: Home, to: "/client/dashboard" },
-//  { name: "", icon: MessageCircle, to: "/client/chat" },
-  
+  //  { name: "", icon: MessageCircle, to: "/client/chat" },
 ];
 
 export default function AppSidebar() {
@@ -23,13 +21,8 @@ export default function AppSidebar() {
       )}
     >
       <div className="flex items-center  p-4">
-        
-        <button
-          className="p-1 rounded-md "
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        <button className="p-1 rounded-md " onClick={() => setIsOpen(!isOpen)}>
           <Menu size={20} />
-         
         </button>
       </div>
 
