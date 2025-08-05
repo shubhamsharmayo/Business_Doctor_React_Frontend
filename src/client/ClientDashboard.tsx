@@ -1,6 +1,6 @@
 import BusinessPlanProgress from "@/components/Client/BusinessPlanProgress";
-import SelectProject from '@/components/Client/Project Management/SelectProject';
-import {CreateProject} from '@/components/Client/Project Management/CreateProject';
+import SelectProject from "@/components/Client/Project Management/SelectProject";
+import { CreateProject } from "@/components/Client/Project Management/CreateProject";
 import { useProjectStore } from "@/store/projectStore";
 import type { ProjectData } from "@/types/project.types";
 import CoachList from "@/components/Client/CoachList";
@@ -34,18 +34,23 @@ const ClientDashboard = () => {
     const fetchUserAndCoach = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`${NODE_API_BASE_URL}/user/find-user/${user.id}`);
+        const res = await fetch(
+          `${NODE_API_BASE_URL}/user/find-user/${user.id}`
+        );
         const data = await res.json();
 
         if (data?.coachId) {
           setAssignedCoach(data.coachId);
-          const coachRes = await fetch(`${NEXT_BASE_URL}/api/v1/get-coach-by-id`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ coachId: data.coachId }),
-          });
+          const coachRes = await fetch(
+            `${NEXT_BASE_URL}/api/v1/get-coach-by-id`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ coachId: data.coachId }),
+            }
+          );
 
           if (coachRes.ok) {
             const coachData = await coachRes.json();
@@ -62,18 +67,24 @@ const ClientDashboard = () => {
     fetchUserAndCoach();
   }, [user?.id]);
 
-  if (!user) return <div className="flex items-center justify-center min-h-screen">
-    <Skeleton className="w-8 h-8 rounded-full mr-2" />
-    <span>Loading user data...</span>
-  </div>;
+  if (!user)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Skeleton className="w-8 h-8 rounded-full mr-2" />
+        <span>Loading user data...</span>
+      </div>
+    );
 
-  if (isLoading) return <div className="flex items-center justify-center min-h-screen">
-    <div className="space-y-4 w-full max-w-md p-6">
-      <Skeleton className="h-8 w-full rounded-lg" />
-      <Skeleton className="h-64 w-full rounded-lg" />
-      <Skeleton className="h-12 w-full rounded-lg" />
-    </div>
-  </div>;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="space-y-4 w-full max-w-md p-6">
+          <Skeleton className="h-8 w-full rounded-lg" />
+          <Skeleton className="h-64 w-full rounded-lg" />
+          <Skeleton className="h-12 w-full rounded-lg" />
+        </div>
+      </div>
+    );
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -91,12 +102,9 @@ const ClientDashboard = () => {
       {/* Project Management Section */}
       <section className="mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          
-            <SelectProject projectData={projects} />
-      
-         
-            <CreateProject />
-          
+          <SelectProject projectData={projects} />
+
+          <CreateProject />
         </div>
 
         {!selectedProject ? (
@@ -105,20 +113,25 @@ const ClientDashboard = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <BusinessPlanProgress projectData={selectedProject as ProjectData} />
-            
+            <BusinessPlanProgress
+              projectData={selectedProject as ProjectData}
+            />
+
             {/* AI Assistant Card */}
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-gray-800">AI Assistant</h2>
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    AI Assistant
+                  </h2>
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                     Online
                   </span>
                 </div>
-                
+
                 <p className="text-gray-600 mb-6">
-                  Your AI assistant is ready to help with your business plan. What would you like to work on today?
+                  Your AI assistant is ready to help with your business plan.
+                  What would you like to work on today?
                 </p>
 
                 <div className="space-y-3 mb-6">

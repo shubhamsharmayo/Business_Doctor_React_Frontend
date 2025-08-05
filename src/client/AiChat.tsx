@@ -11,8 +11,6 @@ import { v4 as uuidv4 } from "uuid";
 
 type ParamsType = Record<string, string | undefined>;
 
-
-
 const AiChat = () => {
   const { chatType } = useParams<ParamsType>();
   const { userId } = useAuth();
@@ -34,46 +32,46 @@ const AiChat = () => {
   const VITE_AI_BACKEND_URL = import.meta.env.VITE_AI_BACKEND;
 
   // 🧠 Save chat session to DB
-  const saveChatSession = useCallback(async(updatedMessages: Message[])=>{
-     
-    console.log("✅ Saving chat session...");
-    if (!userId || !selectedProject?._id || !chatType) return;
-    
-    try {
-      const response = await axios.post(
-        `${NODE_API_BASE_URL}/chats/chat-session/save/${userId}/${selectedProject._id}/${chatType}`,
-        {
-          content: updatedMessages,
-        }
-      );
-      console.log("Chat session saved:", response.data);
-    } catch (error) {
-      console.error("Error saving chat session:", error);
-    }
-    
-  },[userId,selectedProject?._id,chatType]);
+  const saveChatSession = useCallback(
+    async (updatedMessages: Message[]) => {
+      console.log("✅ Saving chat session...");
+      if (!userId || !selectedProject?._id || !chatType) return;
+
+      try {
+        const response = await axios.post(
+          `${NODE_API_BASE_URL}/chats/chat-session/save/${userId}/${selectedProject._id}/${chatType}`,
+          {
+            content: updatedMessages,
+          }
+        );
+        console.log("Chat session saved:", response.data);
+      } catch (error) {
+        console.error("Error saving chat session:", error);
+      }
+    },
+    [userId, selectedProject?._id, chatType]
+  );
 
   useEffect(() => {
-  const fetchChatHistory = async () => {
-    if (!userId || !selectedProject?._id || !chatType) return;
+    const fetchChatHistory = async () => {
+      if (!userId || !selectedProject?._id || !chatType) return;
 
-    try {
-      const response = await axios.get<ChatHistoryResponse>(
-        `${NODE_API_BASE_URL}/chats/${userId}/${selectedProject._id}/${chatType}`
-      );
-      const data = response.data;
+      try {
+        const response = await axios.get<ChatHistoryResponse>(
+          `${NODE_API_BASE_URL}/chats/${userId}/${selectedProject._id}/${chatType}`
+        );
+        const data = response.data;
 
-      if (data?.message_Data?.messages) {
-        setMessages(data.message_Data.messages);
+        if (data?.message_Data?.messages) {
+          setMessages(data.message_Data.messages);
+        }
+      } catch (error) {
+        console.error("Error fetching chat history:", error);
       }
-    } catch (error) {
-      console.error("Error fetching chat history:", error);
-    }
-  };
+    };
 
-  fetchChatHistory();
-}, [userId, selectedProject?._id, chatType]);
-
+    fetchChatHistory();
+  }, [userId, selectedProject?._id, chatType]);
 
   useEffect(() => {
     if (msgLoaded.current) {
@@ -81,9 +79,11 @@ const AiChat = () => {
       saveChatSession(last2);
       msgLoaded.current = false; // reset after saving
     }
-  }, [messages,saveChatSession]);
+  }, [messages, saveChatSession]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     const messageText = currentMessage.trim();
     if (!messageText || !userId || !selectedProject?._id || !chatType) return;
