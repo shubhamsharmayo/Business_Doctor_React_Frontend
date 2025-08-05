@@ -70,7 +70,7 @@ const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({
   }));
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md">
+    <div className="bg-white p-6 dark:bg-gray-700 rounded-xl shadow-md">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">
           Business Plan Progress: {projectData.project_name}{" "}

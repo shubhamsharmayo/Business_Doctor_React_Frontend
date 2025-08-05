@@ -120,27 +120,27 @@ export default function CoachList({ assignedCoach, coachData }: Props) {
     return <p className="text-center my-8">Loading coaches...</p>;
 
   return (
-    <div className="my-6">
+    <div className="my-6 ">
       <h2 className="text-2xl font-semibold mb-4">
         {assignedCoach ? "Your Assigned Coach" : "Select Coaches"}
       </h2>
 
       {/* Case 1: Coach already assigned */}
       {assignedCoach && coachData ? (
-        <div className="bg-white shadow-md rounded-2xl p-6 max-w-md mx-auto text-center">
+        <div className="bg-white dark:bg-gray-700 shadow-md rounded-2xl p-6 max-w-md mx-auto text-center">
           <img
             src={coachData.imageUrl || "/placeholder.jpg"}
             alt={coachData.name}
             className="w-24 h-24 rounded-full object-cover mb-4 mx-auto"
           />
           <h2 className="text-lg font-semibold">{coachData.name}</h2>
-          <p className="text-sm text-gray-500 mb-1">
+          <p className="text-sm dark:text-white text-gray-500 mb-1">
             {coachData.events?.[0]?.title || "No Title"}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm dark:text-white text-gray-600">
             <strong>Industry:</strong> {coachData.industry || "Not specified"}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm dark:text-white text-gray-600">
             <strong>Experience:</strong>{" "}
             {coachData.experience || "Not mentioned"}
           </p>

@@ -119,18 +119,18 @@ const ClientDashboard = () => {
             />
 
             {/* AI Assistant Card */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="bg-white rounded-xl dark:bg-gray-700 shadow-md overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-gray-800">
+                  <h2 className="text-xl dark:text-white font-semibold text-gray-800">
                     AI Assistant
                   </h2>
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  <span className="inline-flex dark:text-white items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                     Online
                   </span>
                 </div>
 
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 dark:text-white mb-6">
                   Your AI assistant is ready to help with your business plan.
                   What would you like to work on today?
                 </p>
