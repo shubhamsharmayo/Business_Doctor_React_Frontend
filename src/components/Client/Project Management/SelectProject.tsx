@@ -13,25 +13,23 @@ interface SelectProjectProps {
   projectData: ProjectData[];
 }
 
-const SelectProject = ({projectData}:SelectProjectProps) => {
-console.log("projectData", projectData)
+const SelectProject = ({ projectData }: SelectProjectProps) => {
+  // console.log("projectData", projectData)
 
-  const setSelectedProject = useProjectStore((state) => state.setSelectedProject);
+  const setSelectedProject = useProjectStore(
+    (state) => state.setSelectedProject
+  );
 
-  const handleProjectSelect = (project:ProjectData) => {
-    console.log("project", project)
-      setSelectedProject(project); 
-      // ✅ update zustand selected project
+  const handleProjectSelect = (project: ProjectData) => {
+    // console.log("project", project)
+    setSelectedProject(project);
+    // ✅ update zustand selected project
   };
-
-  
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Button>
-          Select Projects
-        </Button>
+        <Button>Select Projects</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {projectData?.map((project) => (
