@@ -157,7 +157,7 @@ console.log(foundId)
       return;
     }
     // https://businessdoctor.vercel.app/${coachUsername} For Production
-    const url = `https://businessdoctor.vercel.app/${coachUsername}`;
+    const url = `${NEXT_BASE_URL}/${coachUsername}`;
     window.open(url, "_blank");
     // console.log(coachUsername)
   };
