@@ -69,6 +69,8 @@ const BusinessPlanProgress: React.FC<BusinessPlanProgressProps> = ({
     color: mapStatusToColor(status),
   }));
 
+  // console.log(projectData)
+
   return (
     <div className="bg-white p-6 dark:bg-gray-700 rounded-xl shadow-md">
       <div className="flex items-center justify-between mb-4">

@@ -46,7 +46,7 @@ const ProgressControl = ({
         [progressItem]: selectedStatus,
         // ✅ dynamic key
       };
-
+      console.log(payload);
       const response = await axios.patch(url, payload);
       // ✅ Invalidate the query to refetch updated data
       queryClient.invalidateQueries({ queryKey: ["fetchProjectDataDetails"] });

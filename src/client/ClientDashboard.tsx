@@ -9,15 +9,28 @@ import { NODE_API_BASE_URL, NEXT_BASE_URL } from "@/lib/api_base_url";
 import { useUser } from "@clerk/clerk-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
+type Event = {
+  id: string;
+  title: string;
+  description: string;
+  duration: number;
+  userId: string;
+  isPrivate: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 type Coach = {
   id: string;
   name: string;
   imageUrl: string | null;
   industry: string | null;
   experience: string | null;
-  events: { title: string }[];
+  events: Event[];
   clerkUserId: string;
   username: string;
+  bookings: [];
+  clientIds:[];
 };
 
 const ClientDashboard = () => {
@@ -28,7 +41,7 @@ const ClientDashboard = () => {
   const [assignedCoach, setAssignedCoach] = useState<string | null>(null);
   const [coachData, setCoachData] = useState<Coach | null>(null);
 
-  console.log("coachData", coachData);
+  // console.log("coachData", coachData);
   useEffect(() => {
     if (!user?.id) return;
 
@@ -39,6 +52,7 @@ const ClientDashboard = () => {
           `${NODE_API_BASE_URL}/user/find-user/${user.id}`
         );
         const data = await res.json();
+        // console.log(data)
 
         if (data?.coachId) {
           setAssignedCoach(data.coachId);
@@ -102,7 +116,7 @@ const ClientDashboard = () => {
 
       {/* Project Management Section */}
       <section className="mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className=" flex justify-around gap-4 mb-6">
           <SelectProject projectData={projects} />
 
           <CreateProject />

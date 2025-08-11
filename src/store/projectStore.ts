@@ -3,9 +3,6 @@ import type { ProjectData } from "@/types/project.types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-
-
-
 interface ProjectStore {
   projects: ProjectData[];
   setProjects: (projects: ProjectData[]) => void;
