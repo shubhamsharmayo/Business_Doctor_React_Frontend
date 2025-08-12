@@ -1,6 +1,6 @@
 import AppSidebar from "@/components/AppSidebar";
 import TopNavBar from "@/components/TopMenubar";
-
+import { useState } from "react";
 import { fetchUserAllProjects } from "@/lib/api/project-management";
 import { useProjectStore } from "@/store/projectStore";
 import type { ProjectData } from "@/types/project.types";
@@ -20,7 +20,7 @@ const ClientLayout = () => {
   const setSelectedProject = useProjectStore(
     (state) => state.setSelectedProject
   );
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const clerkId = user?.id;
   // console.log("Clerk ID:", clerkId);
 
@@ -94,9 +94,11 @@ const ClientLayout = () => {
 
       {/* Main content area: sidebar + routed content */}
       <div className="flex">
-        <AppSidebar />
+        <AppSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}/>
 
-        <main className="flex-1 p-4">
+        <main  className={`flex-1 p-4 transition-all duration-300 ${
+            isSidebarOpen ? "ml-64" : "ml-16"
+          }`}>
           <Outlet />
         </main>
       </div>

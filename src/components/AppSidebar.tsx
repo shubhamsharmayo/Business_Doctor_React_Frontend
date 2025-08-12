@@ -1,8 +1,12 @@
 import { Home, Calendar, User } from "lucide-react";
-import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
 import ThemeToggle from "./ThemeToggle";
+
+interface AppSidebarProps {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}
 
 // Define types for navigation items
 interface NavItem {
@@ -17,23 +21,18 @@ const navItems: NavItem[] = [
   { name: "Meetings", icon: Calendar, to: "/client/meetings" },
 ];
 
-const AppSidebar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+const AppSidebar: React.FC<AppSidebarProps> = ({ isOpen, setIsOpen }) => {
   const { pathname } = useLocation();
 
-  // Handler for ThemeToggle to also toggle sidebar
-  const handleThemeToggle = () => {
-    setIsOpen(true);
-  };
-  const removeThemeToggle = () => {
-    setIsOpen(false);
-  };
- 
+  // Hover handlers
+ setIsOpen(true)
 
   return (
-    <aside onMouseEnter={handleThemeToggle} onMouseLeave={removeThemeToggle}
+    <aside
+      // onMouseEnter={handleThemeToggle}
+      // onMouseLeave={removeThemeToggle}
       className={clsx(
-        " top-16 left-0 z-10 h-[calc(100vh-4rem)] flex flex-col border-r border-gray-200 dark:border-gray-700 shadow-md transition-all duration-300 ease-in-out",
+        "fixed top-16 left-0 z-10 h-[calc(100vh-4rem)] flex flex-col border-r border-gray-200 dark:border-gray-700 shadow-md transition-all duration-300 ease-in-out",
         "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100",
         isOpen ? "w-64" : "w-16"
       )}
@@ -56,12 +55,11 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         )}
-        {isOpen&&(
-           <div className={clsx("flex", isOpen ? "ml-auto" : "mx-auto")}>
-          <ThemeToggle  />
-        </div>)
-        }
-       
+        {isOpen && (
+          <div className={clsx("flex", isOpen ? "ml-auto" : "mx-auto")}>
+            <ThemeToggle />
+          </div>
+        )}
       </div>
 
       {/* Navigation */}
