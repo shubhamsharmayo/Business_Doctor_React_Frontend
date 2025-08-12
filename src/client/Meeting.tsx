@@ -70,7 +70,7 @@ const Meeting = () => {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="mt-9">
           <BookingLists user={data?.coaches} />
         </div>
       )}

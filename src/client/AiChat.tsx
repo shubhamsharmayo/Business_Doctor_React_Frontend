@@ -178,7 +178,7 @@ const AiChat = () => {
   };
 
   return (
-    <div className="flex justify-center  h-[calc(100vh-100px)] py-1 px-4 my-1">
+    <div className="flex justify-center  h-[calc(100vh-100px)] py-1 px-4 my-1 mt-12">
       <div className="w-full bg-white/80   backdrop-blur-sm flex flex-col rounded-2xl h-full shadow-xl border border-white/20 overflow-hidden transition-all duration-300 hover:shadow-2xl">
         <MessageArea messages={messages} />
 
