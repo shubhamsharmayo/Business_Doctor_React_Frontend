@@ -9,7 +9,7 @@ import {
 
 export default function TopNavBar() {
   return (
-    <header className="dark:bg-gray-700  w-full h-14 px-4 py-4 flex items-center justify-between shadow-sm bg-white/90 backdrop-blur-md border-b border-gray-200/50">
+    <header className="dark:bg-gray-700 fixed z-10 w-full h-14 px-4 py-4 flex items-center justify-between shadow-sm bg-white/90 backdrop-blur-md border-b border-gray-200/50">
       {/* Left side */}
       <div className="flex items-center gap-3">
         <h1 className="text-xl font-semibold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -47,7 +47,7 @@ export default function TopNavBar() {
         <SignedIn>
           <UserButton />
         </SignedIn>
-        <span className="text-gray-400">v0.20</span>
+        <span className="text-gray-400">v0.21</span>
       </div>
     </header>
   );

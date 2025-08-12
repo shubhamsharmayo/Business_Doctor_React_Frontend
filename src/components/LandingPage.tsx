@@ -105,7 +105,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (isSignedIn) {
-      navigate('/');
+      navigate('/client/dashboard');
     }
   }, [isSignedIn, navigate]);
 
