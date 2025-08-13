@@ -146,7 +146,7 @@ const BookingLists = ({ user }: { user: User[] }) => {
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-2">
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                <h3 className="text-[1.5rem] font-semibold text-gray-900 dark:text-white">
                                   {event.title}
                                 </h3>
                                 <div className="flex items-center gap-2">
