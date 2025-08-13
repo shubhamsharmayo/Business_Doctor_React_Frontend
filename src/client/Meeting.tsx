@@ -1,4 +1,4 @@
-import React from "react";
+
 import { NEXT_BASE_URL } from "@/lib/api_base_url";
 import BookingLists from "@/components/Client/Project Management/BookingLists";
 import { useQuery } from "@tanstack/react-query";
@@ -30,7 +30,7 @@ const Meeting = () => {
   return (
     <div>
       {isLoading ? (
-        <div className="p-4 dark:bg-gray-700 bg-gray-200 text-black dark:text-white rounded-lg">
+        <div className="p-4 dark:bg-gray-700 bg-gray-200 text-black dark:text-white rounded-lg mt-15">
           <h2 className="text-xl font-semibold mb-4">
             Booked Events
           </h2>
@@ -54,7 +54,7 @@ const Meeting = () => {
                 {[...Array(4)].map((_, index) => (
                   <tr
                     key={index}
-                    className="dark:bg-gray-700 bg-white text-black dark:text-white animate-pulse rounded-md"
+                    className="dark:bg-gray-500 bg-white text-black dark:text-white animate-pulse rounded-md"
                   >
                     {Array(9)
                       .fill(0)
