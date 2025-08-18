@@ -10,6 +10,7 @@ import axios from "axios";
 
 import { useEffect } from "react";
 import { Outlet } from "react-router";
+import Loader from "./Loader";
 
 const ClientLayout = () => {
   const { isLoaded, user } = useUser();
@@ -61,26 +62,29 @@ const ClientLayout = () => {
   useEffect(() => {
     const RemoveFromStorage = async () => {
       const sr = JSON.parse(localStorage.getItem("project-storage") || "null");
-      console.log(sr)
+      console.log(sr);
       const data = await fetch(`${fetchUserAllProjects}/${clerkId}`);
       const res: { data: ProjectData[] } = await data.json();
       console.log(res.data);
-      const foundId = res.data?.flatMap((e) => e._id) // combine all clientIds into one array
+      const foundId = res.data
+        ?.flatMap((e) => e._id) // combine all clientIds into one array
         .find((id) => id === sr.state.selectedProject._id);
       console.log(foundId);
       if (!foundId) {
         setSelectedProject(res.data[0]);
       }
-      console.log(selectedProject)
+      console.log(selectedProject);
     };
 
     RemoveFromStorage();
   }, [selectedProject, setSelectedProject, clerkId]);
 
-  
-
   if (isLoading || !isLoaded) {
-    return <div className="my-24">Loading...</div>;
+    return (
+      <div className="flex w-full h-[100vh] items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
   if (isError) {
     return <div className="my-24">Error: Error occured</div>;
@@ -94,11 +98,13 @@ const ClientLayout = () => {
 
       {/* Main content area: sidebar + routed content */}
       <div className="flex">
-        <AppSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}/>
+        <AppSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
-        <main  className={`flex-1 p-4 transition-all duration-300 ${
+        <main
+          className={`flex-1 p-4 transition-all duration-300 ${
             isSidebarOpen ? "ml-64" : "ml-16"
-          }`}>
+          }`}
+        >
           <Outlet />
         </main>
       </div>
