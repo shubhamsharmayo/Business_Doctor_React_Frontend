@@ -51,8 +51,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(51.1% 0.262 276.966)
-;
+  --primary: oklch(51.1% 0.262 276.966);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -146,3 +145,7 @@
   }
 }
 
+body::selection {
+  background-color: rgb(156, 24, 182);
+  color: rgb(255, 255, 255);
+}
