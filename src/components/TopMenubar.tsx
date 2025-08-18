@@ -47,7 +47,7 @@ export default function TopNavBar() {
         <SignedIn>
           <UserButton />
         </SignedIn>
-        <span className="text-gray-400">v0.23</span>
+        <span className="text-gray-400">v0.24</span>
       </div>
     </header>
   );
