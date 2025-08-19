@@ -97,9 +97,7 @@ const fetchAssignedCoach = async (
 ): Promise<Coach | null> => {
   if (!userId) return null;
 
-  const res = await fetch(
-    `${NEXT_BASE_URL}/api/user/assigned-coach?userId=${userId}`
-  );
+  const res = await fetch(`${NEXT_BASE_URL}/api/assigned-coach/${userId}`);
   if (!res.ok) {
     if (res.status === 404) return null; // No assigned coach
     throw new Error("Failed to fetch assigned coach");
@@ -173,7 +171,7 @@ export default function CoachList({
   );
 
   // Determine if user has an assigned coach
-  const hasAssignedCoach = initialAssignedCoach || assignedCoachData;
+  const hasAssignedCoach =  assignedCoachData|| initialAssignedCoach;
   const displayCoachData = assignedCoachData || initialCoachData;
 
   // Coach selection mutation
@@ -209,7 +207,8 @@ export default function CoachList({
     const url = `${NEXT_BASE_URL}/${coachUsername}`;
     window.open(url, "_blank");
   };
-
+  // console.log(displayCoachData);
+  // console.log( coaches)
   // Loading state
   if (coachesLoading || assignedCoachLoading || !isLoaded) {
     return (

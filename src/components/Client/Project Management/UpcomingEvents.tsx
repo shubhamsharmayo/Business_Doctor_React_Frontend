@@ -1,5 +1,6 @@
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Calendar, Clock, User, Video, Info, ChevronRight } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
 
 type Event = {
   id: string;
@@ -42,49 +43,57 @@ type Coaches = {
 
 const UpcomingEvents = ({ coaches }: { coaches: Coaches[] }) => {
   const [loading, setLoading] = useState(true);
+  const {user} = useUser()
+  console.log(coaches);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const now = new Date();
-
-  // Get next upcoming booking
-  const { nextBooking, matchedEvent, timeUntilEvent } = useMemo(() => {
-    const allBookings = coaches.flatMap((coach) => 
-      coach.bookings.map(booking => ({ ...booking, coach }))
-    );
+  // Helper function to get next booking data
+  const getNextBookingData = () => {
+    const now = new Date();
+    
+    // Get all bookings with coach data
+    const bookings  = coaches.flatMap(coach => coach.bookings.filter((coaches)=> coaches.email === user?.externalAccounts[0].emailAddress));
+    const  allBookings= bookings.map((each)=> ({...each}))
+    console.log(allBookings)
+    // Get all events
     const allEvents = coaches.flatMap((coach) => coach.events);
     
+    // Filter and sort future bookings
     const futureBookings = allBookings
-      .filter((booking) => new Date(booking.startTime) > now)
-      .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+    .filter((booking) => new Date(booking.startTime) > now)
+    .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+   
 
     const nextBooking = futureBookings[0];
-    const matchedEvent = nextBooking 
-      ? allEvents.find((event) => event.id === nextBooking.eventId)
-      : null;
-    const matchedCoach = nextBooking?.coach || null;
-
-    let timeUntilEvent = '';
-    if (nextBooking) {
-      const timeDiff = new Date(nextBooking.startTime).getTime() - now.getTime();
-      const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-      const days = Math.floor(hours / 24);
-      
-      if (days > 0) {
-        timeUntilEvent = `${days} day${days > 1 ? 's' : ''} away`;
-      } else if (hours > 0) {
-        timeUntilEvent = `${hours} hour${hours > 1 ? 's' : ''} away`;
-      } else {
-        const minutes = Math.floor(timeDiff / (1000 * 60));
-        timeUntilEvent = `${minutes} minute${minutes > 1 ? 's' : ''} away`;
-      }
+    
+    if (!nextBooking) {
+      return { nextBooking: null, matchedEvent: null, timeUntilEvent: '' };
     }
 
-    return { nextBooking, matchedEvent, matchedCoach, timeUntilEvent };
-  }, [coaches, now]);
+    // Find matching event
+    const matchedEvent = allEvents.find((event) => event.id === nextBooking.eventId);
+ 
+    // Calculate time until event
+    const timeDiff = new Date(nextBooking.startTime).getTime() - now.getTime();
+    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+    const days = Math.floor(hours / 24);
+    
+    let timeUntilEvent = '';
+    if (days > 0) {
+      timeUntilEvent = `${days} day${days > 1 ? 's' : ''} away`;
+    } else if (hours > 0) {
+      timeUntilEvent = `${hours} hour${hours > 1 ? 's' : ''} away`;
+    } else {
+      const minutes = Math.floor(timeDiff / (1000 * 60));
+      timeUntilEvent = `${minutes} minute${minutes > 1 ? 's' : ''} away`;
+    }
+
+    return { nextBooking, matchedEvent, timeUntilEvent };
+  };
 
   // Format date and time
   const formatDateTime = (dateString: string) => {
@@ -107,6 +116,9 @@ const UpcomingEvents = ({ coaches }: { coaches: Coaches[] }) => {
       })
     };
   };
+
+  // Get the booking data
+  const { nextBooking, matchedEvent, timeUntilEvent } = getNextBookingData();
 
   // Compact loading skeleton
   if (loading) {

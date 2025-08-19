@@ -7,7 +7,7 @@ import { useUser } from "@clerk/clerk-react";
 
 const Meeting = () => {
   const {user} = useUser()
-  console.log(user?.id)
+  // console.log(user?.id)
   const FetchBookings = async () => {
     try {
       const bookings = await fetch(`${NEXT_BASE_URL}/api/assigned-coach/${user?.id}`);
@@ -25,7 +25,7 @@ const Meeting = () => {
     queryKey: ["bookings"],
     queryFn: FetchBookings,
   });
-  console.log(data?.coaches)
+  // console.log(data?.coaches)
   if (error) return <div>Error fetching bookings</div>;
   return (
     <div>
@@ -71,7 +71,7 @@ const Meeting = () => {
         </div>
       ) : (
         <div className="mt-9">
-          <BookingLists user={data?.coaches} />
+          <BookingLists users={data?.coaches} />
         </div>
       )}
     </div>

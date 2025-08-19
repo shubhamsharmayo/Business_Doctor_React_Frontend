@@ -47,7 +47,7 @@ const ClientLayout = () => {
     if (!projectData) return;
     setProjects(projectData);
 
-    console.log(selectedProject);
+    // console.log(selectedProject);
 
     // Sync the selected project with updated data
     const existingSelected = useProjectStore.getState().selectedProject;
@@ -73,7 +73,7 @@ const ClientLayout = () => {
       if (!foundId) {
         setSelectedProject(res.data[0]);
       }
-      console.log(selectedProject);
+      // console.log(selectedProject);
     };
 
     RemoveFromStorage();
