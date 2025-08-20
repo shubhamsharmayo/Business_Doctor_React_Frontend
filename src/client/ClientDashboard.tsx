@@ -52,7 +52,7 @@ const ClientDashboard = () => {
           `${NODE_API_BASE_URL}/user/find-user/${user.id}`
         );
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
 
         if (data?.coachId) {
           setAssignedCoach(data.coachId);

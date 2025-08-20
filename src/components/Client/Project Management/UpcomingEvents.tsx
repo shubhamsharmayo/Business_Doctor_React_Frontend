@@ -44,7 +44,7 @@ type Coaches = {
 const UpcomingEvents = ({ coaches }: { coaches: Coaches[] }) => {
   const [loading, setLoading] = useState(true);
   const {user} = useUser()
-  console.log(coaches);
+  // console.log(coaches);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 800);
@@ -58,7 +58,7 @@ const UpcomingEvents = ({ coaches }: { coaches: Coaches[] }) => {
     // Get all bookings with coach data
     const bookings  = coaches.flatMap(coach => coach.bookings.filter((coaches)=> coaches.email === user?.externalAccounts[0].emailAddress));
     const  allBookings= bookings.map((each)=> ({...each}))
-    console.log(allBookings)
+    // console.log(allBookings)
     // Get all events
     const allEvents = coaches.flatMap((coach) => coach.events);
     

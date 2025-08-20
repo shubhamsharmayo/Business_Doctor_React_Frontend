@@ -5,6 +5,7 @@ import ClientDashboard from "@/client/ClientDashboard";
 import AiChat from "@/client/AiChat.tsx";
 import Onboard from "@/components/Onboard";
 import Meeting from "@/client/Meeting";
+import PriceList from '@/client/PriceList'
 // import CoachSignup from '../coach/CoachSignup';
 // import CoachOnboarding from '../coach/CoachOnboarding';
 // import CoachDashboard from '../coach/CoachDashboard';
@@ -15,6 +16,7 @@ const MainRoutes = () => {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/onboard" element={<Onboard />} />
+        <Route path="/prices" element={<PriceList />} />
       {/* <Route path="/coach-signup" element={<CoachSignup />} /> */}
       {/* <Route path="/coach-onboarding" element={<CoachOnboarding />} /> */}
       <Route path="/client" element={<ClientLayout />}>

@@ -59,25 +59,25 @@ const ClientLayout = () => {
     }
   }, [projectData, selectedProject, setProjects, setSelectedProject]);
 
-  useEffect(() => {
-    const RemoveFromStorage = async () => {
-      const sr = JSON.parse(localStorage.getItem("project-storage") || "null");
-      console.log(sr);
-      const data = await fetch(`${fetchUserAllProjects}/${clerkId}`);
-      const res: { data: ProjectData[] } = await data.json();
-      console.log(res.data);
-      const foundId = res.data
-        ?.flatMap((e) => e._id) // combine all clientIds into one array
-        .find((id) => id === sr.state.selectedProject._id);
-      console.log(foundId);
-      if (!foundId) {
-        setSelectedProject(res.data[0]);
-      }
-      // console.log(selectedProject);
-    };
+  // useEffect(() => {
+  //   const RemoveFromStorage = async () => {
+  //     const sr = JSON.parse(localStorage.getItem("project-storage") || "null");
+  //     console.log(sr.state.selectedProject);
+  //     const data = await fetch(`${fetchUserAllProjects}/${clerkId}`);
+  //     const res: { data: ProjectData[] } = await data.json();
+  //     console.log(res.data);
+  //     const foundId = res.data
+  //       ?.flatMap((e) => e._id) // combine all clientIds into one array
+  //       .find((id) => id === sr.state.selectedProject._id);
+  //     console.log(foundId);
+  //     if (!sr.state.selectedProject && !foundId) {
+  //       setSelectedProject(res.data[0]);
+  //     }
+  //     // console.log(selectedProject);
+  //   };
 
-    RemoveFromStorage();
-  }, [selectedProject, setSelectedProject, clerkId]);
+  //   RemoveFromStorage();
+  // }, [selectedProject, setSelectedProject, clerkId]);
 
   if (isLoading || !isLoaded) {
     return (
