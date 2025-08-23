@@ -4,9 +4,12 @@ import {
 import MainRoutes from '@/Routes/MainRoutes.js';
 import { Toaster } from 'react-hot-toast';
 
+
 export default function App() {
   const { user } = useUser();
   console.log(user);
+
+  
 
   
   return (

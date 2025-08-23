@@ -12,6 +12,11 @@ import { useEffect } from "react";
 import { Outlet } from "react-router";
 import Loader from "./Loader";
 
+type Project = {
+  _id: number;
+  project_name: string;
+};
+
 const ClientLayout = () => {
   const { isLoaded, user } = useUser();
 
@@ -23,7 +28,7 @@ const ClientLayout = () => {
   );
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const clerkId = user?.id;
-  // console.log("Clerk ID:", clerkId);
+  console.log("Clerk ID:", clerkId);
 
   const UserAllProjects = async (clerkId: string): Promise<ProjectData[]> => {
     //  console.log("Fetching projects for:", clerkId);
@@ -43,6 +48,8 @@ const ClientLayout = () => {
     enabled: !!clerkId,
   });
 
+  console.log(projectData);
+
   useEffect(() => {
     if (!projectData) return;
     setProjects(projectData);
@@ -59,25 +66,26 @@ const ClientLayout = () => {
     }
   }, [projectData, selectedProject, setProjects, setSelectedProject]);
 
-  // useEffect(() => {
-  //   const RemoveFromStorage = async () => {
-  //     const sr = JSON.parse(localStorage.getItem("project-storage") || "null");
-  //     console.log(sr.state.selectedProject);
-  //     const data = await fetch(`${fetchUserAllProjects}/${clerkId}`);
-  //     const res: { data: ProjectData[] } = await data.json();
-  //     console.log(res.data);
-  //     const foundId = res.data
-  //       ?.flatMap((e) => e._id) // combine all clientIds into one array
-  //       .find((id) => id === sr.state.selectedProject._id);
-  //     console.log(foundId);
-  //     if (!sr.state.selectedProject && !foundId) {
-  //       setSelectedProject(res.data[0]);
-  //     }
-  //     // console.log(selectedProject);
-  //   };
+  useEffect(() => {
+    const sr = JSON.parse(localStorage.getItem("project-storage") || "null");
+if (!sr || !sr.state || !Array.isArray(sr.state.projects)) return;
+    const selectedProjectCheck = sr.state.projects.find(
+      (u: Project) => sr?.state?.selectedProject?.project_name === u.project_name
+    );
 
-  //   RemoveFromStorage();
-  // }, [selectedProject, setSelectedProject, clerkId]);
+    console.log(selectedProjectCheck);
+    // const data = await fetch(`${fetchUserAllProjects}/${clerkId}`);
+    // const res: { data: ProjectData[] } = await data.json();
+    // console.log(res.data);
+    // const foundId = res.data
+    //   ?.flatMap((e) => e._id) // combine all clientIds into one array
+    //   .find((id) => id === sr.state.selectedProject._id);
+    // console.log(foundId);
+    if (!selectedProjectCheck) {
+      setSelectedProject(sr.state.projects[0]);
+    }
+    // console.log(selectedProject);
+  }, [clerkId, setSelectedProject, projectData]);
 
   if (isLoading || !isLoaded) {
     return (
