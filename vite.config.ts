@@ -5,6 +5,7 @@ import path from "path"
 
 export default defineConfig({
   plugins: [react()],
+  base:"/",
    build: {
     chunkSizeWarningLimit: 1000, // kB
   },
