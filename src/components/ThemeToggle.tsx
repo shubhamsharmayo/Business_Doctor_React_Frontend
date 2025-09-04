@@ -6,16 +6,16 @@ export default function ThemeToggle() {
   return (
        <div
      onClick={toggleTheme}
-     className="relative w-20 h-8 flex items-center
+     className="relative w-12 h-6 flex items-center
      bg-gray-300 dark:bg-gray-500
      rounded-full p-1 cursor-pointer
      transition-all duration-300 ease-in-out"
     >
      {/* Sliding Sun and Moon */}
      <span
-        className={`absolute w-6 h-6 flex items-center justify-center
+        className={`absolute w-4 h-4 flex items-center justify-center
          rounded-full shadow-md transition-transform duration-500 ease-in-out
-         ${theme === "dark" ? "translate-x-10" : "translate-x-0"}
+         ${theme === "dark" ? "translate-x-6" : "translate-x-0"}
         `}
      >
         {theme === "light" ? (

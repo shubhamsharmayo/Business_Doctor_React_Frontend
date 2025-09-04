@@ -4,12 +4,12 @@ import { useState } from "react";
 import { fetchUserAllProjects } from "@/lib/api/project-management";
 import { useProjectStore } from "@/store/projectStore";
 import type { ProjectData } from "@/types/project.types";
-import { useUser } from "@clerk/clerk-react";
+import { RedirectToSignUp, useUser } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import { useEffect } from "react";
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 import Loader from "./Loader";
 
 type Project = {
@@ -18,7 +18,7 @@ type Project = {
 };
 
 const ClientLayout = () => {
-  const { isLoaded, user } = useUser();
+  const { isLoaded, user, isSignedIn } = useUser();
 
   // All hooks at top level
   const setProjects = useProjectStore((state) => state.setProjects);
@@ -68,9 +68,10 @@ const ClientLayout = () => {
 
   useEffect(() => {
     const sr = JSON.parse(localStorage.getItem("project-storage") || "null");
-if (!sr || !sr.state || !Array.isArray(sr.state.projects)) return;
+    if (!sr || !sr.state || !Array.isArray(sr.state.projects)) return;
     const selectedProjectCheck = sr.state.projects.find(
-      (u: Project) => sr?.state?.selectedProject?.project_name === u.project_name
+      (u: Project) =>
+        sr?.state?.selectedProject?.project_name === u.project_name
     );
 
     console.log(selectedProjectCheck);
@@ -96,6 +97,16 @@ if (!sr || !sr.state || !Array.isArray(sr.state.projects)) return;
   }
   if (isError) {
     return <div className="my-24">Error: Error occured</div>;
+  }
+
+  const isPurchased = user?.publicMetadata?.isPurchased;
+
+  if (!isSignedIn) {
+    return <RedirectToSignUp redirectUrl="/onboard"/>;
+  }
+
+  if (!isPurchased) {
+    return <Navigate to="/prices" />;
   }
 
   return (

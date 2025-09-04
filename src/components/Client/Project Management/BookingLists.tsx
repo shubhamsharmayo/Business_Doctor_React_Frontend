@@ -56,16 +56,19 @@ const BookingLists = ({ users }: { users: Users[] }) => {
       }),
     };
   };
-  console.log(users);
+  // console.log(users);
   // console.log(users[0]);
 
   const allbookings = users.map((book) => book.bookings);
-  console.log(allbookings);
- const userbookings = allbookings.flatMap((e)=>e.filter(
-      (each) => each.email === user?.externalAccounts[0].emailAddress
-    ))
-    const bookingAndEvent = [{bookings:userbookings, events:users[0].events, name:users[0].name}]
-  console.log(bookingAndEvent)
+  // console.log(allbookings);
+  const userbookings = allbookings.flatMap((e) =>
+    e.filter((each) => each.email === user?.externalAccounts[0].emailAddress)
+  );
+
+  const bookingAndEvent = [
+    { bookings: userbookings, events: users[0].events, name: users[0].name },
+  ];
+  // console.log(bookingAndEvent)
   // Get upcoming vs past bookings
   const categorizeBookings = (bookings: Booking[]) => {
     const now = new Date();

@@ -5,9 +5,13 @@ import { useProjectStore } from "@/store/projectStore";
 import type { ProjectData } from "@/types/project.types";
 import CoachList from "@/components/Client/CoachList";
 import { useEffect, useState } from "react";
-import { NODE_API_BASE_URL, NEXT_BASE_URL } from "@/lib/api_base_url";
+import { NEXT_BASE_URL } from "@/lib/api_base_url";
 import { useUser } from "@clerk/clerk-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import ProUpgradeBanner from "@/components/Client/Project Management/ProUpgradebanner";
+import { Link } from "react-router";
+import { ChevronRight } from "lucide-react";
+import { useUserStore } from "@/store/useUserStore";
 
 type Event = {
   id: string;
@@ -22,15 +26,35 @@ type Event = {
 
 type Coach = {
   id: string;
+  clerkUserId: string;
+  email: string;
+  username: string;
   name: string;
+  role: string;
   imageUrl: string | null;
   industry: string | null;
   experience: string | null;
   events: Event[];
-  clerkUserId: string;
-  username: string;
   bookings: [];
-  clientIds: [];
+  clientIds: string[];
+  bio: string;
+  isOnboarded: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type assignCoach = {
+  _id: string;
+  clerkId: string;
+  name: string | null;
+  email: string;
+  role: "client" | "coach" | "admin"; // extend if you have more roles
+  isPurchased: boolean;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  __v: number;
+  plan: "basic" | "pro" | "enterprise"; // adjust based on your plans
+  coachId?: string; // optional if some users don't have a coach
 };
 
 const ClientDashboard = () => {
@@ -38,24 +62,32 @@ const ClientDashboard = () => {
   const { user } = useUser();
   const selectedProject = useProjectStore((state) => state.selectedProject);
   const projects = useProjectStore((state) => state.projects);
-  const [assignedCoach, setAssignedCoach] = useState<string | null>(null);
+  const [assignedCoach, setAssignedCoach] = useState<assignCoach | null>(null);
   const [coachData, setCoachData] = useState<Coach | null>(null);
+  const { userData, fetchUser } = useUserStore();
 
   // console.log("coachData", coachData);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    fetchUser(user?.id);
+  }, []);
+
   useEffect(() => {
     if (!user?.id) return;
 
     const fetchUserAndCoach = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(
-          `${NODE_API_BASE_URL}/user/find-user/${user.id}`
-        );
-        const data = await res.json();
+        // const res = await fetch(
+        //   `${NODE_API_BASE_URL}/user/find-user/${user.id}`
+        // );
+        // const data = await res.json();
         // console.log(data);
 
-        if (data?.coachId) {
-          setAssignedCoach(data.coachId);
+        if (userData?.coachId) {
+          setAssignedCoach(userData);
+
           const coachRes = await fetch(
             `${NEXT_BASE_URL}/api/v1/get-coach-by-id`,
             {
@@ -63,7 +95,7 @@ const ClientDashboard = () => {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ coachId: data.coachId }),
+              body: JSON.stringify({ coachId: userData.coachId }),
             }
           );
 
@@ -80,7 +112,10 @@ const ClientDashboard = () => {
     };
 
     fetchUserAndCoach();
-  }, [user?.id]);
+  }, [user?.id, userData?.coachId]);
+
+  console.log(userData);
+  console.log(assignedCoach);
 
   if (!user)
     return (
@@ -100,22 +135,50 @@ const ClientDashboard = () => {
         </div>
       </div>
     );
-
+  // console.log(isLoading)
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Coach Section */}
-      <section className="mb-8">
-        {isLoading ? (
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <p className="text-gray-600">No coach assigned yet</p>
-          </div>
-        ) : (
-          <CoachList assignedCoach={assignedCoach} coachData={coachData} />
-        )}
-      </section>
+      {user?.publicMetadata?.plan === "basic" && (
+        <div className="mt-8">
+          <ProUpgradeBanner />
+        </div>
+      )}
+      {user?.publicMetadata?.plan === "pro" && (
+        <section className="mb-8">
+          {isLoading ? (
+            <div className="bg-white rounded-lg shadow p-6 text-center">
+              <p className="text-gray-600">No coach assigned yet</p>
+            </div>
+          ) : (
+            <div className="flex flex-wrap h-full mt-5">
+              <CoachList
+                // assignedCoach={assignedCoach}
+                coachData={coachData}
+                dataDisplayAmount={2}
+              />
+              <div className="  ml-21 p-6 ">
+                {!isLoading && !assignedCoach?.coachId ? (
+                  <div className="flex items-center justify-center ">
+                    <Link
+                      to="/client/coach"
+                      className="group relative inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl dark:shadow-gray-500 active:scale-95"
+                    >
+                      View All
+                      <ChevronRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                    </Link>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Project Management Section */}
-      <section className="mb-8">
+      <section className="mt-15">
         <div className=" flex justify-around gap-4 mb-6">
           <SelectProject projectData={projects} />
 

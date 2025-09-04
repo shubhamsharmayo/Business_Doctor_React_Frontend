@@ -5,7 +5,11 @@ import ClientDashboard from "@/client/ClientDashboard";
 import AiChat from "@/client/AiChat.tsx";
 import Onboard from "@/components/Onboard";
 import Meeting from "@/client/Meeting";
-import PriceList from '@/client/PriceList'
+import PricePage from '@/client/PricePage'
+import Success from '@/components/Success'
+import  Cancel  from "@/components/Cancel";
+import NotFound from "@/client/NotFound";
+import Coaches from "@/client/Coaches";
 // import CoachSignup from '../coach/CoachSignup';
 // import CoachOnboarding from '../coach/CoachOnboarding';
 // import CoachDashboard from '../coach/CoachDashboard';
@@ -14,14 +18,19 @@ import PriceList from '@/client/PriceList'
 const MainRoutes = () => {
   return (
     <Routes>
+      <Route path="*" element={<NotFound/>} />
       <Route path="/" element={<LandingPage />} />
       <Route path="/onboard" element={<Onboard />} />
-        <Route path="/prices" element={<PriceList />} />
+        <Route path="/prices" element={<PricePage />} />
       {/* <Route path="/coach-signup" element={<CoachSignup />} /> */}
       {/* <Route path="/coach-onboarding" element={<CoachOnboarding />} /> */}
+      <Route path="/success" element={<Success />} />
+      <Route path="/cancel" element={<Cancel />} />
       <Route path="/client" element={<ClientLayout />}>
         <Route path="dashboard" element={<ClientDashboard />} />
         <Route path="meetings" element={<Meeting />} />
+        <Route path="coach" element={<Coaches />} />
+
         <Route path="chat/:chatType" element={<AiChat />} />
       </Route>
 

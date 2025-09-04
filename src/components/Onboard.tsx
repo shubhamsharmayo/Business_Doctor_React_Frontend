@@ -23,9 +23,10 @@ export default function Onboard() {
 
       const payload = {
         clerkId: user.id,
-        name: `${user.username}`, // Could be null
+        name: `${user.fullName}`, // Could be null
         email: user.primaryEmailAddress?.emailAddress,
         role: "client",
+        imageUrl:user.imageUrl
       };
 
       console.log("[Onboard] Payload to send:", payload);
@@ -39,7 +40,7 @@ export default function Onboard() {
 
         console.log("[Onboard] Sync successful. Response:", response.data);
         console.log("[Onboard] Navigating to /client/dashboard...");
-        navigate("/client/dashboard");
+        navigate("/");
       } catch (err) {
         console.error("[Onboard] Failed to sync user to DB:", err);
         // if (err.response) {
@@ -49,6 +50,9 @@ export default function Onboard() {
     };
 
     syncUser();
+    if(user){
+        navigate("/client/dashboard");
+    }
   }, [user, isLoaded, navigate]);
 
   return (

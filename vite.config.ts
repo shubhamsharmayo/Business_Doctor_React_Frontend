@@ -17,5 +17,6 @@ export default defineConfig({
   server: {
     // ✅ No need for historyApiFallback
     port: 5173, // optional
+    allowedHosts: true,
   }
 })

@@ -1,16 +1,19 @@
-
 import { NEXT_BASE_URL } from "@/lib/api_base_url";
 import BookingLists from "@/components/Client/Project Management/BookingLists";
 import { useQuery } from "@tanstack/react-query";
 
 import { useUser } from "@clerk/clerk-react";
+import SelectCoachDisplay from "./SelectCoachDisplay";
+import PlanComparisonCard from "@/components/Client/Project Management/PlanComparisonCard";
 
 const Meeting = () => {
-  const {user} = useUser()
+  const { user } = useUser();
   // console.log(user?.id)
   const FetchBookings = async () => {
     try {
-      const bookings = await fetch(`${NEXT_BASE_URL}/api/assigned-coach/${user?.id}`);
+      const bookings = await fetch(
+        `${NEXT_BASE_URL}/api/assigned-coach/${user?.id}`
+      );
       const data = await bookings.json();
       // console.log(data)
 
@@ -20,20 +23,17 @@ const Meeting = () => {
     }
   };
 
-  
   const { data, isLoading, error } = useQuery({
     queryKey: ["bookings"],
     queryFn: FetchBookings,
   });
-  // console.log(data?.coaches)
+  console.log(data?.coaches);
   if (error) return <div>Error fetching bookings</div>;
   return (
     <div>
       {isLoading ? (
         <div className="p-4 dark:bg-gray-700 bg-gray-200 text-black dark:text-white rounded-lg mt-15">
-          <h2 className="text-xl font-semibold mb-4">
-            Booked Events
-          </h2>
+          <h2 className="text-xl font-semibold mb-4">Booked Events</h2>
 
           <div className="w-full overflow-x-auto">
             <table className="w-full table-auto dark:bg-gray-700 bg-gray-200 text-black dark:text-white border-separate border-spacing-y-2">
@@ -70,8 +70,20 @@ const Meeting = () => {
           </div>
         </div>
       ) : (
-        <div className="mt-9">
-          <BookingLists users={data?.coaches} />
+        <div>
+          {user?.publicMetadata?.plan === "pro" ? (
+            <div className="mt-9">
+              {data?.coaches.length !== 0 ? (
+                <BookingLists users={data?.coaches} />
+              ) : (
+                <SelectCoachDisplay />
+              )}
+            </div>
+          ) : (
+            <div className="mt-8">
+              <PlanComparisonCard />
+            </div>
+          )}
         </div>
       )}
     </div>

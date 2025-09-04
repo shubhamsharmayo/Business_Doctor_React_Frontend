@@ -19,6 +19,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { name: "Dashboard", icon: Home, to: "/client/dashboard" },
   { name: "Meetings", icon: Calendar, to: "/client/meetings" },
+  { name: "Coach", icon: User, to: "/client/coach" },
 ];
 
 const AppSidebar: React.FC<AppSidebarProps> = ({ isOpen, setIsOpen }) => {
